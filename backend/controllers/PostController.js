@@ -91,6 +91,11 @@ async function getPost(req, res) {
   }
 }
 
+// get all posts in pagination style
+//
+// create a function for pagination... getPostsforPagination
+//
+
 // exports all the functions as module
 module.exports = {
   createPost,

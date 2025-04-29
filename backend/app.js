@@ -11,21 +11,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // routes
+//
+// post route
 const postRoutes = require("./routes/PostRoute");
+// user route
+const userRoutes = require("./routes/UserRoute");
 
 // mounting routers
+//
+// mounting post router
 app.use("/posts", postRoutes);
+// mounting user router
+app.use("/users", userRoutes);
 
 app.get("/", function (req, res) {
   res.send("hello express");
 });
 
-// db.sequelize
-//   .sync({ alter: false, force: false })
-//   .then(() => {
-//     console.log("db conntected");
-//   })
-//   .catch(console.error);
+db.sequelize
+  .sync({ alter: false, force: false })
+  .then(() => {
+    console.log("db conntected");
+  })
+  .catch(console.error);
 
 app.listen(port, function () {
   console.log(`server running on http://localhost:${port}`);

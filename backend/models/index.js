@@ -42,4 +42,11 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+// this section would declare sequelize connecting with the database
+// then this could be exported with db and would be able to use
+// in app.js is where it is implemented...
+// ex) db.sequelize.sync... and on
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
 module.exports = db;
