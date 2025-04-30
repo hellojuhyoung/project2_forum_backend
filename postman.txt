@@ -1,0 +1,15 @@
+/posts
+{
+    "title": "test1title",
+    "content": "test1content",
+    "thumbnail": "test1thumbnail",
+    "contentImage": "test1contentImage",
+    "userid" : 2
+}
+
+/users
+{
+    "username": "test1username",
+    "password": "test1password",
+    "email": "test1email"
+}

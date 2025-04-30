@@ -27,37 +27,37 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    // userid: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: "User",
-    //     key: "id",
-    //   },
-    //   onDelete: "CASCADE",
-    // },
+    userid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Users",
+        key: "id",
+      },
+      onDelete: "cascade",
+    },
     // categoryid: {
     //   type: DataTypes.INTEGER,
     //   allowNull: false,
     //   references: {
-    //     model: "Category",
+    //     model: "Categories",
     //     key: "id",
     //   },
     //   onDelete: "CASCADE",
     // },
   });
 
-  // Post.associate = (db) => {
-  //   Post.belongsTo(db.User, {
-  //     foreignKey: "userid",
-  //     targetKey: "id",
-  //     onDelete: "CASCADE",
-  //   });
-  //   Post.belongsTo(db.Category, {
-  //     foreignKey: "categoryid",
-  //     targetKey: "id",
-  //     onDelete: "CASCADE",
-  //   });
-  // };
+  Posts.associate = (db) => {
+    Posts.belongsTo(db.Users, {
+      foreignKey: "userid",
+      targetKey: "id",
+      onDelete: "cascade",
+    });
+    // Posts.belongsTo(db.Categories, {
+    //   foreignKey: "categoryid",
+    //   targetKey: "id",
+    //   onDelete: "CASCADE",
+    // });
+  };
   return Posts;
 };

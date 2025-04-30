@@ -7,4 +7,7 @@ const router = express.Router();
 // create user
 router.post("/", userController.createUser);
 
+// delete user
+router.delete("/:id", userController.deleteUser);
+
 module.exports = router;

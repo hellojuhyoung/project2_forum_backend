@@ -3,9 +3,9 @@ const models = require("../models");
 // function to create posts with its title, content, thumbnail, contentImage
 async function createPost(req, res) {
   try {
-    const { title, content, thumbnail, contentImage } = req.body;
+    const { title, content, thumbnail, contentImage, userid } = req.body;
     console.log("this is req.body", req.body);
-
+    console.log("this is uerid", req.body.userid);
     // the name of the table is set to "Posts" to call the table
     // migration/model/mysql all their names have to match
     await models.Posts.create({
@@ -13,6 +13,7 @@ async function createPost(req, res) {
       content: content,
       thumbnail: thumbnail,
       contentImage: contentImage,
+      userid: userid,
     });
 
     // must require response, or else it's in infinite loop

@@ -23,15 +23,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      // postid: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: "Post",
-      //     key: "id",
-      //   },
-      //   onDelete: "CASCADE",
-      // },
     },
     {
       charset: "utf8",
@@ -41,13 +32,13 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   // setup any foreign keys with other tables
-  // User.associate = (db) => {
-  //   User.hasMany(db.Post, {
-  //     foreignKey: "postid",
-  //     targetKey: "id",
-  //     onDelete: "CASCADE",
-  //   });
-  // };
+  Users.associate = (db) => {
+    Users.hasMany(db.Posts, {
+      foreignKey: "userid",
+      sourceKey: "id",
+      onDelete: "cascade",
+    });
+  };
 
   return Users;
 };

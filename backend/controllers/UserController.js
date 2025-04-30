@@ -28,6 +28,19 @@ async function createUser(req, res) {
   }
 }
 
+async function deleteUser(req, res) {
+  try {
+    const id = req.body.id;
+    await models.Users.destroy({ where: { id: id } });
+    res.json({ id, result: true, message: "succeeded in deleting user" });
+  } catch (error) {
+    console.log(error);
+    console.error("error deleting user");
+    res.json({ result: false, message: "error in deleting user" });
+  }
+}
+
 module.exports = {
   createUser,
+  deleteUser,
 };
