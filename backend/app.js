@@ -16,6 +16,8 @@ app.use(express.json());
 const postRoutes = require("./routes/PostRoute");
 // user route
 const userRoutes = require("./routes/UserRoute");
+// auth route
+const authRoutes = require("./routes/AuthRoute");
 
 // mounting routers
 //
@@ -23,6 +25,8 @@ const userRoutes = require("./routes/UserRoute");
 app.use("/posts", postRoutes);
 // mounting user router
 app.use("/users", userRoutes);
+// mounting auth router
+app.use("/auth", authRoutes);
 
 app.get("/", function (req, res) {
   res.send("hello express");

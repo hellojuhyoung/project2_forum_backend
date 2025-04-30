@@ -1,5 +1,10 @@
 const models = require("../models");
 
+// add authentication
+// hash password
+const bcrypt = require("bcrypt");
+const salt = 10;
+
 // function to create user with its username, password, email
 // *password will be hashed
 async function createUser(req, res) {
@@ -10,9 +15,16 @@ async function createUser(req, res) {
     const bodyPassword = req.body.password;
     const bodyEmail = req.body.email;
 
+    // hash the password input
+    async function hashPassword(password) {
+      return await bcrypt.hash(password, salt);
+    }
+    const hashedPassword = await hashPassword(bodyPassword);
+
+    console.log("this is hashed password", hashedPassword);
     const user = {
       username: bodyUsername,
-      password: bodyPassword,
+      password: hashedPassword,
       email: bodyEmail,
     };
 
@@ -28,6 +40,7 @@ async function createUser(req, res) {
   }
 }
 
+// delete user with their associated posts
 async function deleteUser(req, res) {
   try {
     const id = req.body.id;
@@ -40,7 +53,69 @@ async function deleteUser(req, res) {
   }
 }
 
+// function to update user by 'id' (integer)
+async function updateUser(req, res) {
+  try {
+    const bodyUsername = req.body.username;
+    const bodyEmail = req.body.email;
+
+    const update = {
+      username: bodyUsername,
+      email: bodyEmail,
+    };
+    const id = req.body.id;
+    await models.Users.update(update, { where: { id: id } });
+
+    res.json({ update, result: true, message: "succeeded in updating user" });
+  } catch (error) {
+    console.log(error);
+    console.error("error in updating user");
+    res.status(500).json({ result: false, error: "error updating user" });
+  }
+}
+
+// get a single user information
+async function getUser(req, res) {
+  try {
+    const id = req.body.id;
+    const user = await models.Users.findOne({ where: { id: id } });
+
+    res.json({
+      user,
+      postByUser,
+      result: true,
+      message: "succeeded in getting user",
+    });
+  } catch (error) {
+    console.log(error);
+    console.error("error in getting user");
+    res.status(500).json({ result: false, error: "error getting user" });
+  }
+}
+
+// get all the posts written by user
+async function getUserPosts(req, res) {
+  try {
+    const id = req.body.id;
+    const postByUser = await models.Posts.findAll({ where: { userid: id } });
+    res.json({
+      postByUser,
+      result: true,
+      message: "succeeded in getting posts by user",
+    });
+  } catch (error) {
+    console.log(error);
+    console.error("error in getting posts by user");
+    res
+      .status(500)
+      .json({ result: false, error: "error getting posts by user" });
+  }
+}
+
 module.exports = {
   createUser,
   deleteUser,
+  updateUser,
+  getUser,
+  getUserPosts,
 };

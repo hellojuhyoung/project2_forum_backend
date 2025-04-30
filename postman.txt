@@ -1,4 +1,4 @@
-/posts
+/posts post method (create post)
 {
     "title": "test1title",
     "content": "test1content",
@@ -7,7 +7,7 @@
     "userid" : 2
 }
 
-/users
+/users post method (create user)
 {
     "username": "test1username",
     "password": "test1password",

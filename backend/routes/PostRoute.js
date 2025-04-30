@@ -1,3 +1,5 @@
+// mounted router with /posts/...
+
 const postController = require("../controllers/PostController");
 const express = require("express");
 const router = express.Router();

@@ -67,9 +67,9 @@ async function updatePost(req, res) {
     console.log("this is update body", req.body);
     console.log("this is update params", req.params);
 
-    const updated = await models.Posts.update(update, { where: { id: id } });
+    await models.Posts.update(update, { where: { id: id } });
 
-    res.json({ updated, result: true, message: "succeeded in updating post" });
+    res.json({ update, result: true, message: "succeeded in updating post" });
   } catch (error) {
     console.log(error);
     console.error("error in updating post");
@@ -81,7 +81,6 @@ async function updatePost(req, res) {
 async function getPost(req, res) {
   try {
     const id = req.body.id;
-
     const post = await models.Posts.findOne({ where: { id: id } });
 
     res.json({ post, result: true, message: "succeeded in getting post" });
