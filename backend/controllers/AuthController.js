@@ -1,11 +1,15 @@
+// after installing dotenv by using the command
+// 'npm install dotenv' would need to import using the
+// following line below ... then JWT_SECRET value is successfully
+// imported from the local .env file
+require("dotenv").config();
+
 const models = require("../models");
 
 // bcrypt and jwt imports
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET;
-// declare salt
-const salt = 10;
 
 // generate token
 function generateToken(username) {
