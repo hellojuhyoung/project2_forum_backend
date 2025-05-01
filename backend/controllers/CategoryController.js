@@ -34,4 +34,21 @@ async function deleteCategory(req, res) {
   }
 }
 
-module.exports = { createCategory, deleteCategory };
+async function getCategory(req, res) {
+  try {
+    const { id } = req.body;
+    const category = await models.Categories.findOne({ where: { id: id } });
+    const label = category.label;
+    res.json({
+      label,
+      result: true,
+      message: "succeeded in getting category",
+    });
+  } catch (error) {
+    console.log(error);
+    console.error("error in getting category");
+    res.status(500).json({ result: false, error: "error getting category" });
+  }
+}
+
+module.exports = { createCategory, deleteCategory, getCategory };

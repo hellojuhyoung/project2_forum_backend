@@ -2,6 +2,10 @@ const express = require("express");
 const app = express();
 const port = 5001;
 
+// declare imports for swagger
+const swaggerUi = require("swagger-ui-express"); // 입력
+const swaggerFile = require("./swagger/swagger-output.json"); // 입력
+
 // import database from models
 const db = require("./models");
 
@@ -23,6 +27,9 @@ const categoryRoutes = require("./routes/CategoryRoute");
 
 // mounting routers
 //
+// mount swagger router
+app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 // mounting post router
 app.use("/posts", postRoutes);
 // mounting user router
