@@ -18,6 +18,8 @@ const postRoutes = require("./routes/PostRoute");
 const userRoutes = require("./routes/UserRoute");
 // auth route
 const authRoutes = require("./routes/AuthRoute");
+// category route
+const categoryRoutes = require("./routes/CategoryRoute");
 
 // mounting routers
 //
@@ -27,6 +29,8 @@ app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
 // mounting auth router
 app.use("/auth", authRoutes);
+// mounting category router
+app.use("/categories", categoryRoutes);
 
 app.get("/", function (req, res) {
   res.send("hello express");

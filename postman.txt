@@ -4,7 +4,8 @@
     "content": "test1content",
     "thumbnail": "test1thumbnail",
     "contentImage": "test1contentImage",
-    "userid" : 2
+    "userid" : "2",
+    "categoryid": "1"
 }
 
 /users post method (create user)

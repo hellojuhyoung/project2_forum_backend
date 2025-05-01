@@ -12,24 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // userid: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: "User",
-    //     key: "id",
-    //   },
-    //   onDelete: "CASCADE",
-    // },
-    // postid: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: "Post",
-    //     key: "id",
-    //   },
-    //   onDelete: "CASCADE",
-    // },
   });
+
+  Categories.associate = (db) => {
+    Categories.hasMany(db.Posts);
+  };
   return Categories;
 };

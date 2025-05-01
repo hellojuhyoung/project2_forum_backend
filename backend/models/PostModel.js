@@ -36,15 +36,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: "cascade",
     },
-    // categoryid: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: "Categories",
-    //     key: "id",
-    //   },
-    //   onDelete: "CASCADE",
-    // },
+    categoryid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Categories",
+        key: "id",
+      },
+      onDelete: "cascade",
+    },
   });
 
   Posts.associate = (db) => {
@@ -53,11 +53,10 @@ module.exports = (sequelize, DataTypes) => {
       targetKey: "id",
       onDelete: "cascade",
     });
-    // Posts.belongsTo(db.Categories, {
-    //   foreignKey: "categoryid",
-    //   targetKey: "id",
-    //   onDelete: "CASCADE",
-    // });
+    Posts.belongsTo(db.Categories, {
+      foreignKey: "categoryid",
+      onDelete: "cascade",
+    });
   };
   return Posts;
 };
