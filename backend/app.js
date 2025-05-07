@@ -1,4 +1,6 @@
 const express = require("express");
+// add cors
+const cors = require("cors");
 const app = express();
 const port = 5001;
 
@@ -9,6 +11,8 @@ const swaggerFile = require("./swagger/swagger-output.json"); // 입력
 // import database from models
 const db = require("./models");
 
+// let server to use cors
+app.use(cors());
 // req.body of (title from post) is undefiend by default
 // need to parse the body with middleware
 app.use(express.urlencoded({ extended: true }));
