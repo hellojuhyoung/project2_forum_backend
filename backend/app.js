@@ -1,8 +1,15 @@
+require("dotenv").config();
+
 const express = require("express");
 // add cors
 const cors = require("cors");
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 const app = express();
-const port = 5001;
+const port = process.env.PORT_NUMBER;
 
 // declare imports for swagger
 const swaggerUi = require("swagger-ui-express"); // 입력
@@ -12,7 +19,9 @@ const swaggerFile = require("./swagger/swagger-output.json"); // 입력
 const db = require("./models");
 
 // let server to use cors
-app.use(cors());
+// this is to prevent front to share the same resources with
+// the backend; CORS is referred to cross-origin resource sharing
+app.use(cors(corsOptions));
 // req.body of (title from post) is undefiend by default
 // need to parse the body with middleware
 app.use(express.urlencoded({ extended: true }));

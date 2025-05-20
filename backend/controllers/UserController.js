@@ -13,7 +13,7 @@ async function createUser(req, res) {
 
     const bodyUsername = req.body.username;
     const bodyPassword = req.body.password;
-    const bodyEmail = req.body.email;
+    // const bodyEmail = req.body.email;
 
     // hash the password input
     async function hashPassword(password) {
@@ -25,7 +25,7 @@ async function createUser(req, res) {
     const user = {
       username: bodyUsername,
       password: hashedPassword,
-      email: bodyEmail,
+      // email: bodyEmail,
     };
 
     console.log("this is userData", user);
@@ -57,11 +57,10 @@ async function deleteUser(req, res) {
 async function updateUser(req, res) {
   try {
     const bodyUsername = req.body.username;
-    const bodyEmail = req.body.email;
+    // const bodyEmail = req.body.email;
 
     const update = {
       username: bodyUsername,
-      email: bodyEmail,
     };
     const id = req.body.id;
     await models.Users.update(update, { where: { id: id } });
@@ -77,12 +76,15 @@ async function updateUser(req, res) {
 // get a single user information
 async function getUser(req, res) {
   try {
-    const id = req.body.id;
+    // since the userid is contained in the url instead of the body
+    // in json format... ex) /users/${id}, the variable id
+    // is set to req.params.id rather than body
+    // const id = req.body.id;
+    const id = req.params.id;
     const user = await models.Users.findOne({ where: { id: id } });
 
     res.json({
       user,
-      postByUser,
       result: true,
       message: "succeeded in getting user",
     });
@@ -96,8 +98,12 @@ async function getUser(req, res) {
 // get all the posts written by user
 async function getUserPosts(req, res) {
   try {
-    const id = req.body.id;
-    const postByUser = await models.Posts.findAll({ where: { userid: id } });
+    // const id = req.body.id;
+    const id = req.params.id;
+    const postByUser = await models.Posts.findAll({
+      where: { userid: id },
+      order: [["createdAt", "DESC"]],
+    });
     res.json({
       postByUser,
       result: true,

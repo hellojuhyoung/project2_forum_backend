@@ -12,8 +12,8 @@ const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET;
 
 // generate token
-function generateToken(username) {
-  const token = jwt.sign({ username: username }, secretKey, {
+function generateToken(id, username) {
+  const token = jwt.sign({ id: id, username: username }, secretKey, {
     expiresIn: "1h",
   });
   return token;
@@ -26,6 +26,7 @@ async function login(req, res) {
     const { username, password } = req.body;
     const user = await models.Users.findOne({ where: { username: username } });
     const validatePassword = await bcrypt.compare(password, user.password);
+    const id = user.id;
 
     if (!user) {
       res.status(401).json({ result: false, message: "user cannot be found" });
@@ -36,9 +37,9 @@ async function login(req, res) {
     }
 
     if (user && validatePassword) {
-      const token = generateToken(username);
+      const token = generateToken(id, username);
       res.cookie("token", token, { maxAge: 1000 * 60 * 60 });
-      res.json({ result: true, message: "login successful" });
+      res.json({ id, username, result: true, message: "login successful" });
     } else {
       res.json({ result: false, message: "login failed" });
     }
@@ -49,4 +50,26 @@ async function login(req, res) {
   }
 }
 
-module.exports = { login };
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    // console.log("this is req", req);
+
+    const user = await models.Users.findByPk(userId, {
+      attributes: ["id", "username"],
+    });
+
+    // console.log("this is user", user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error in getProfile:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { login, getProfile };

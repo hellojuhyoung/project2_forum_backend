@@ -7,10 +7,14 @@ const router = express.Router();
 // routes with different methods
 //
 // get post
+// *** always put more specific (static) routes like /recent
+// *** before dynamic ones like /:id
+router.get("/recent", postController.getRecentPosts);
+router.get("/", postController.getPaginatedPosts);
 router.get("/:id", postController.getPost);
 
 // create post
-router.post("/", postController.createPost);
+router.post("/create", postController.createPost);
 
 // update post
 router.put("/update/:id", postController.updatePost);

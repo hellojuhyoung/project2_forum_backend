@@ -37,7 +37,8 @@ async function deletePost(req, res) {
     // req.body contains all the columns from the mysql table
     // would have to specify the variable such as id
     // the req.body data is in object form
-    await models.Posts.destroy({ where: { id: req.body.id } });
+    const id = req.params.id;
+    await models.Posts.destroy({ where: { id: id } });
 
     res.json({ result: true, message: "succeeded in deleting post" });
   } catch (error) {
@@ -52,10 +53,10 @@ async function updatePost(req, res) {
   try {
     // since the 'id' value is also part of req.body
     // would need to separately declare variables from req.body
-    const bodyTitle = req.body.title;
-    const bodyContent = req.body.content;
-    const bodyThumbnail = req.body.thumbnail;
-    const bodyContentImage = req.body.contentImage;
+    const bodyTitle = req.body.data.title;
+    const bodyContent = req.body.data.content;
+    const bodyThumbnail = req.body.data.thumbnail;
+    const bodyContentImage = req.body.data.contentImage;
     // then group all the variables that's part of the post
     // into an object called 'update'
     const update = {
@@ -64,9 +65,10 @@ async function updatePost(req, res) {
       thumbnail: bodyThumbnail,
       contentImage: bodyContentImage,
     };
-    const id = req.body.id;
+    const id = req.body.data.id;
     // const id = req.params.id;
     console.log("this is update body", req.body);
+    console.log("this is title", req.body.data.title);
     console.log("this is update params", req.params);
 
     await models.Posts.update(update, { where: { id: id } });
@@ -82,8 +84,11 @@ async function updatePost(req, res) {
 // get a single post
 async function getPost(req, res) {
   try {
-    const id = req.body.id;
-    const post = await models.Posts.findOne({ where: { id: id } });
+    const id = req.params.id;
+    const response = await models.Posts.findOne({ where: { id: id } });
+    const post = response.dataValues;
+    // console.log("response", response.dataValues);
+    // console.log("backend", post);
 
     res.json({ post, result: true, message: "succeeded in getting post" });
   } catch (error) {
@@ -93,9 +98,60 @@ async function getPost(req, res) {
   }
 }
 
+// get top 8 most recent posts
+const getRecentPosts = async (req, res) => {
+  try {
+    const limit = 8;
+
+    const posts = await models.Posts.findAll({
+      limit,
+      order: [["createdAt", "DESC"]],
+    });
+
+    // console.log(posts);
+
+    res.json({
+      posts,
+      result: true,
+      message: "succeeded in getting most recent posts",
+    });
+  } catch (error) {
+    console.error("error fetching most recent posts", error);
+  }
+};
+
 // get all posts in pagination style
-//
-// create a function for pagination... getPostsforPagination
+const getPaginatedPosts = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 16;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await models.Posts.findAndCountAll({
+      offset,
+      limit,
+      order: [["createdAt", "DESC"]],
+    });
+
+    const posts = rows.map((post) => post.dataValues);
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({
+      posts,
+      currentPage: page,
+      totalPages,
+      totalPosts: count,
+      result: true,
+      message: "Succeeded in getting paginated posts",
+    });
+  } catch (error) {
+    console.error("Error in fetching paginated posts:", error);
+    res.status(500).json({
+      result: false,
+      message: "Failed to fetch posts",
+    });
+  }
+};
 //
 
 // exports all the functions as module
@@ -104,4 +160,6 @@ module.exports = {
   deletePost,
   updatePost,
   getPost,
+  getRecentPosts,
+  getPaginatedPosts,
 };
