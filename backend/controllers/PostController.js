@@ -3,17 +3,17 @@ const models = require("../models");
 // function to create posts with its title, content, thumbnail, contentImage
 async function createPost(req, res) {
   try {
-    const { title, content, thumbnail, contentImage, userid, categoryid } =
-      req.body;
+    // const { title, content, thumbnail, contentImage, userid, categoryid } =
+    const { title, userid, categoryid } = req.body;
     console.log("this is req.body", req.body);
     console.log("this is uerid", req.body.userid);
     // the name of the table is set to "Posts" to call the table
     // migration/model/mysql all their names have to match
     await models.Posts.create({
       title: title,
-      content: content,
-      thumbnail: thumbnail,
-      contentImage: contentImage,
+      // content: content,
+      // thumbnail: thumbnail,
+      // contentImage: contentImage,
       userid: userid,
       categoryid: categoryid,
     });

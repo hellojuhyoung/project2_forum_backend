@@ -23,10 +23,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    contentImage: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
     userid: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -44,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         key: "id",
       },
       onDelete: "cascade",
+      field: "categoryid",
     },
   });
 
@@ -54,7 +51,17 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "cascade",
     });
     Posts.belongsTo(db.Categories, {
-      foreignKey: "categoryid",
+      foreignKey: {
+        name: "categoryid",
+        field: "categoryid",
+      },
+      targetKey: "id",
+      as: "category",
+      onDelete: "cascade",
+    });
+    Posts.hasMany(db.PostImages, {
+      foreignKey: "postid",
+      as: "images",
       onDelete: "cascade",
     });
   };

@@ -51,4 +51,17 @@ async function getCategory(req, res) {
   }
 }
 
-module.exports = { createCategory, deleteCategory, getCategory };
+async function getCategories(req, res) {
+  try {
+    const data = await models.Categories.findAll();
+    // console.log(data);
+    const categories = data.map((category) => category.dataValues);
+    // console.log(categories);
+
+    res.json(categories);
+  } catch (error) {
+    console.error("error fetching all categories", error);
+  }
+}
+
+module.exports = { createCategory, deleteCategory, getCategory, getCategories };
