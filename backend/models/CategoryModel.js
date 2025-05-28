@@ -15,7 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Categories.associate = (db) => {
-    Categories.hasMany(db.Posts);
+    Categories.hasMany(db.Posts, {
+      foreignKey: {
+        name: "categoryid",
+        field: "categoryid",
+      },
+      sourceKey: "id",
+      as: "posts",
+      onDelete: "cascade",
+    });
   };
   return Categories;
 };

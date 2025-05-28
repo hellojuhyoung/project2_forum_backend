@@ -2,7 +2,7 @@ const models = require("../models");
 
 async function createCategory(req, res) {
   try {
-    console.log("this is categroy", req.body);
+    // console.log("this is categroy", req.body);
 
     const { label } = req.body;
     const category = {

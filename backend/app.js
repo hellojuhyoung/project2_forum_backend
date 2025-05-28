@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const path = require("path");
 // add cors
 const cors = require("cors");
 const corsOptions = {
@@ -24,8 +25,11 @@ const db = require("./models");
 app.use(cors(corsOptions));
 // req.body of (title from post) is undefiend by default
 // need to parse the body with middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "10mb" }));
+
+// serve 'uploads' folder statically at the '/uploads' route
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // routes
 //
@@ -37,11 +41,13 @@ const userRoutes = require("./routes/UserRoute");
 const authRoutes = require("./routes/AuthRoute");
 // category route
 const categoryRoutes = require("./routes/CategoryRoute");
-
+// like route
+const likeRoutes = require("./routes/LikeRoute");
 // mounting routers
 //
 // mount swagger router
-app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+// *use command node swagger.js
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // mounting post router
 app.use("/posts", postRoutes);
@@ -51,6 +57,8 @@ app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 // mounting category router
 app.use("/categories", categoryRoutes);
+// mounting like router
+app.use("/likes", likeRoutes);
 
 app.get("/", function (req, res) {
   res.send("hello express");

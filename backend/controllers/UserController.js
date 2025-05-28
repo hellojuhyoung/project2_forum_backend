@@ -9,7 +9,7 @@ const salt = 10;
 // *password will be hashed
 async function createUser(req, res) {
   try {
-    console.log("this is createUser", req);
+    // console.log("this is createUser", req);
 
     const bodyUsername = req.body.username;
     const bodyPassword = req.body.password;
@@ -21,14 +21,14 @@ async function createUser(req, res) {
     }
     const hashedPassword = await hashPassword(bodyPassword);
 
-    console.log("this is hashed password", hashedPassword);
+    // console.log("this is hashed password", hashedPassword);
     const user = {
       username: bodyUsername,
       password: hashedPassword,
       // email: bodyEmail,
     };
 
-    console.log("this is userData", user);
+    // console.log("this is userData", user);
 
     await models.Users.create(user);
 
@@ -103,6 +103,13 @@ async function getUserPosts(req, res) {
     const postByUser = await models.Posts.findAll({
       where: { userid: id },
       order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: models.Users,
+          as: "user",
+          attributes: ["username"],
+        },
+      ],
     });
     res.json({
       postByUser,

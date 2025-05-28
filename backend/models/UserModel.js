@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: "id",
       onDelete: "cascade",
     });
+    Users.hasMany(db.Likes, { foreignKey: "userid" });
   };
 
   return Users;
