@@ -44,7 +44,7 @@ const getLikeCounts = async (req, res) => {
   try {
     const counts = await models.Likes.count({ where: { postid } });
 
-    console.log("backend like counts", counts);
+    // console.log("backend like counts", counts);
     res.json({ data: { result: true, message: "counts", counts } });
   } catch (error) {
     res.status(500).json({ result: false, message: "server error", error });
@@ -52,9 +52,9 @@ const getLikeCounts = async (req, res) => {
 };
 
 const checkLiked = async (req, res) => {
-  console.log("Full req.query:", req.query);
+  // console.log("Full req.query:", req.query);
   const { userid, postid } = req.query;
-  console.log("userid:", userid, "postid:", postid);
+  // console.log("userid:", userid, "postid:", postid);
 
   if (!userid) {
     // No user logged in, so "liked" is always false for anonymous user

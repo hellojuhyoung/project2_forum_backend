@@ -10,6 +10,7 @@ const router = express.Router();
 // *** always put more specific (static) routes like /recent
 // *** before dynamic ones like /:id
 router.get("/recent", postController.getRecentPosts);
+router.get("/mostLiked", postController.getMostLikedPosts);
 router.get("/", postController.getPaginatedPosts);
 router.get("/:id", postController.getPost);
 

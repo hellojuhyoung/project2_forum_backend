@@ -214,6 +214,77 @@ const getRecentPosts = async (req, res) => {
   }
 };
 
+const getMostLikedPosts = async (req, res) => {
+  try {
+    const limit = 8; // As requested, fetch the top 8 posts
+
+    // Dynamically get all original column names from your Posts model.
+    // This ensures you get all standard post data (id, title, content, etc.).
+    const postAttributes = Object.keys(models.Posts.rawAttributes);
+
+    // Prepare the list of attributes to select:
+    // 1. All original columns from the Posts model.
+    // 2. A new computed column 'likesCount' that will hold the count of likes for each post.
+    const attributesToSelect = [
+      ...postAttributes,
+      [
+        models.sequelize.fn("COUNT", models.sequelize.col("Likes.id")),
+        "likesCount",
+      ], // SQL: COUNT(Likes.id) AS likesCount
+    ];
+
+    const posts = await models.Posts.findAll({
+      attributes: attributesToSelect,
+      include: [
+        {
+          // Include the User model to get the username of the post author.
+          model: models.Users,
+          as: "user",
+          attributes: ["username"],
+        },
+        {
+          // Include the Likes model to count the likes.
+          // We don't need any attributes from the Likes table itself for this query.
+          model: models.Likes,
+          attributes: [],
+          // 'duplicating: false' is important for performance and correct counting
+          // when using aggregates with joins.
+          duplicating: false,
+        },
+      ],
+      // The 'group' clause is CRUCIAL when using aggregate functions (like COUNT).
+      // You must list every non-aggregated column that you're selecting.
+      group: [
+        "Posts.id", // Always group by the primary key of the main model (Posts)
+        // Group by all other original attributes of the Posts model.
+        // We prefix with 'Posts.' because we're joining tables.
+        ...postAttributes.map((attr) => `Posts.${attr}`),
+        // If you are selecting attributes from an included model (like 'user.username'),
+        // you MUST also include that model's primary key in the group clause.
+        "user.id", // Assuming 'id' is the primary key of the Users model
+      ],
+      // Order the results by the computed 'likesCount' in descending order (highest to lowest).
+      // Use models.sequelize.literal because 'likesCount' is an alias, not a physical column.
+      order: [[models.sequelize.literal("likesCount"), "DESC"]],
+      limit: limit, // Apply the limit of 8 posts
+      // 'subQuery: false' is often necessary to ensure 'limit' works correctly
+      // when combined with 'group' and 'include'.
+      subQuery: false,
+    });
+
+    res.json({
+      posts: posts, // Send the fetched posts array in the response
+      result: true,
+      message: "succeeded in getting most liked posts",
+    });
+  } catch (error) {
+    console.error("error fetching most liked posts:", error);
+    res
+      .status(500)
+      .json({ result: false, message: "server error", error: error.message });
+  }
+};
+
 // get all posts in pagination style
 const getPaginatedPosts = async (req, res) => {
   try {
@@ -241,7 +312,7 @@ const getPaginatedPosts = async (req, res) => {
     }));
     const totalPages = Math.ceil(count / limit);
 
-    console.log("this is backend", posts);
+    // console.log("this is backend", posts);
 
     res.json({
       posts,
@@ -268,5 +339,6 @@ module.exports = {
   updatePost,
   getPost,
   getRecentPosts,
+  getMostLikedPosts,
   getPaginatedPosts,
 };

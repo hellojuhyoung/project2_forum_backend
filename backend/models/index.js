@@ -8,14 +8,26 @@ const config = require(__dirname + "/../config/config.json")[env];
 const db = {};
 
 let sequelize;
+const sequelizeLoggingOption = env === "production" ? false : console.log;
+
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    ...config,
+    logging: sequelizeLoggingOption,
+  });
 } else {
+  // Create a new options object by spreading the existing config
+  // and then adding or overriding the logging property
+  const sequelizeOptions = {
+    ...config, // This spreads all properties from your config.json (host, dialect, etc.)
+    logging: sequelizeLoggingOption, // This adds or overrides the logging property
+  };
+
   sequelize = new Sequelize(
     config.database,
     config.username,
     config.password,
-    config
+    sequelizeOptions // Pass the new options object here
   );
 }
 
