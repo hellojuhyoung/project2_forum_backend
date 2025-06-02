@@ -1,27 +1,24 @@
+// backend/auth/passportConfig.js
+
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const jwt = require("jsonwebtoken");
-// Import your User model here
-const User = require("../models/User"); // Adjust path as needed
+// REMOVE: const jwt = require("jsonwebtoken"); // No longer needed here for token generation
+const db = require("../models");
 
-// This function will be called from app.js to configure passport
 const setupPassport = (app) => {
-  // Passport Serialization/Deserialization
-  // Required for Passport's session management during the OAuth handshake
   passport.serializeUser((user, done) => {
     done(null, user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await User.findByPk(id); // Use findByPk for Sequelize, or findById for Mongoose
+      const user = await db.Users.findByPk(id);
       done(null, user);
     } catch (error) {
       done(error, null);
     }
   });
 
-  // Google Strategy Configuration
   passport.use(
     new GoogleStrategy(
       {
@@ -31,49 +28,39 @@ const setupPassport = (app) => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          let user = await User.findOne({ where: { googleId: profile.id } });
+          const userEmail =
+            profile.emails && profile.emails.length > 0
+              ? profile.emails[0].value
+              : null;
 
-          if (!user) {
-            // Check if an existing local user has this email but no googleId
-            let existingLocalUser = await User.findOne({
-              where: { email: profile.emails[0].value, googleId: null },
-            });
-
-            if (existingLocalUser) {
-              // Link existing local user with Google ID
-              existingLocalUser.googleId = profile.id;
-              await existingLocalUser.save();
-              user = existingLocalUser;
-            } else {
-              // Create a new user if no existing local user or google user found
-              user = await User.create({
-                googleId: profile.id,
-                username:
-                  profile.displayName || profile.emails[0].value.split("@")[0],
-                email: profile.emails[0].value,
-                profilePicture:
-                  profile.photos && profile.photos.length > 0
-                    ? profile.photos[0].value
-                    : null,
-                isProfileComplete: false, // Mark as incomplete for onboarding
-              });
-            }
+          if (!userEmail) {
+            return done(new Error("Google profile missing email."), null);
           }
 
-          // Issue your own application's JWT
-          const payload = {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-          };
-          const appToken = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1h",
-          });
+          let user = await db.Users.findOne({ where: { email: userEmail } });
+          let isNewUser = false; // Flag to indicate if it's a new registration
 
-          done(null, user, {
-            appToken: appToken,
-            isNewUser: !user.isProfileComplete,
-          }); // Pass isProfileComplete status
+          if (user) {
+            // User found with this email
+            if (user.loginMethod === "local") {
+              user.loginMethod = "google";
+              await user.save();
+            }
+          } else {
+            // No user found with this email, create a new one
+            isNewUser = true; // Mark as new user
+            user = await db.Users.create({
+              username: userEmail.split("@")[0], // Still derive a placeholder username
+              email: userEmail,
+              loginMethod: "google",
+              profilePicture: null,
+              isProfileComplete: false, // Will be set to true after profile completion page
+            });
+          }
+
+          // No longer generating token here.
+          // Just pass the user object and the isNewUser flag to the callback handler.
+          done(null, user, { isNewUser: isNewUser });
         } catch (error) {
           console.error("Error during Google OAuth callback:", error);
           done(error, null);
@@ -81,7 +68,6 @@ const setupPassport = (app) => {
       }
     )
   );
-  // You would add other strategies (Kakao, Naver) here later
 };
 
 module.exports = setupPassport;

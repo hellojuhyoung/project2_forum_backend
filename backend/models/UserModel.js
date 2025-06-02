@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         type: DataTypes.STRING,
@@ -52,8 +52,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       profilePicture: {
-        type: DataTypes.STRING, // To store the file path/URL
+        type: DataTypes.STRING,
         allowNull: true,
+      },
+      loginMethod: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [["local", "google", "naver", "kakao"]],
+        },
       },
     },
     {

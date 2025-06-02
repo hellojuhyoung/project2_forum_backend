@@ -19,6 +19,13 @@ const swaggerFile = require("./swagger/swagger-output.json"); // 입력
 // import database from models
 const db = require("./models");
 
+// for social logins google/kakao/naver
+const passport = require("passport");
+const session = require("express-session");
+const setupPassport = require("./auth/passportConfig");
+const sessionMiddleware = require("./middlewares/sessionMiddleware");
+const cookieParser = require("cookie-parser");
+
 // let server to use cors
 // this is to prevent front to share the same resources with
 // the backend; CORS is referred to cross-origin resource sharing
@@ -27,9 +34,16 @@ app.use(cors(corsOptions));
 // need to parse the body with middleware
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(express.json({ limit: "10mb" }));
+app.use(cookieParser());
 
 // serve 'uploads' folder statically at the '/uploads' route
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// session middleware
+app.use(sessionMiddleware);
+app.use(passport.initialize());
+app.use(passport.session());
+setupPassport(app);
 
 // routes
 //
@@ -65,7 +79,7 @@ app.get("/", function (req, res) {
 });
 
 db.sequelize
-  .sync({ alter: false, force: false })
+  .sync({ alter: true })
   .then(() => {
     console.log("db conntected");
   })

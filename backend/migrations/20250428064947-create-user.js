@@ -16,7 +16,7 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         type: Sequelize.STRING,
@@ -52,6 +52,10 @@ module.exports = {
       profilePicture: {
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      loginMethod: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

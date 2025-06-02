@@ -1,44 +1,52 @@
-// auth/SocialAuthController.js
+// backend/controllers/SocialAuthController.js
 
-const passport = require("passport"); // Import passport here as well
-const jwt = require("jsonwebtoken"); // Assuming you use it for local tokens
+const passport = require("passport");
+const { generateToken } = require("../utils/jwtUtils");
 
 const SocialAuthController = {
-  // Method to initiate Google Login
-  // This will call passport.authenticate as middleware
   googleLogin: (req, res, next) => {
-    // passport.authenticate returns a middleware function.
-    // We execute it here with req, res, next to initiate the OAuth flow.
-    passport.authenticate("google", { scope: ["profile", "email"] })(
-      req,
-      res,
-      next
-    );
+    passport.authenticate("google", {
+      scope: ["profile", "email"],
+      session: false,
+    })(req, res, next);
   },
 
-  // Method for the Google OAuth callback
-  // This runs AFTER Passport has successfully authenticated the user
   googleCallback: (req, res) => {
-    // If authentication is successful, req.authInfo contains custom info from done() callback
-    const { appToken, isNewUser } = req.authInfo;
-    const userId = req.user.id; // The user object from your DB
+    // req.user will contain the user object (id, email, etc.) from the DB
+    // req.authInfo will contain the info object (now just { isNewUser }) from done()
+    const { isNewUser } = req.authInfo;
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+    const username = req.user.username; // This might be a placeholder, but available if needed
 
-    // Determine redirect path based on whether it's a new social user needing onboarding
-    const redirectPath = isNewUser
-      ? `/profile-completion` // Frontend route for new social users to complete profile
-      : `/dashboard`; // Frontend route for returning users
+    // Generate the token using ID and Email (for social logins)
+    const appToken = generateToken({ id: userId, email: userEmail }); // Use object for payload
 
-    // Redirect to your frontend, passing the token and new user status
-    res.redirect(
-      `${process.env.FRONTEND_URL}${redirectPath}?token=${appToken}&userId=${userId}`
-    );
+    // 1. Set the token in an HTTP-only cookie
+    res.cookie("token", appToken, {
+      maxAge: 1000 * 60 * 60, // 1 hour
+      httpOnly: false,
+      secure: false,
+      sameSite: "Lax",
+    });
+
+    // 2. Determine redirect URL based on whether it's a new user
+    let redirectUrl = `${process.env.FRONTEND_URL}`; // Default to main page
+
+    if (isNewUser) {
+      redirectUrl += `/account/update`; // Frontend route for new social users to complete profile
+    }
+
+    // Append essential user info as query parameters
+    // Pass the actual username from req.user for existing users, or the email for new ones
+    const displayUsername = isNewUser ? userEmail.split("@")[0] : username; // Use derived username or existing one
+
+    redirectUrl += `?userId=${userId}&username=${displayUsername}&isNewUser=${isNewUser}&email=${userEmail}`;
+    // The token is now in the cookie, no need to pass it in the URL query params for security.
+    // Frontend will read it from document.cookie or via getCookie utility.
+
+    res.redirect(redirectUrl);
   },
-
-  // You would add methods for Kakao and Naver here later:
-  // kakaoLogin: (req, res, next) => { passport.authenticate('kakao', { /* scope */ })(req, res, next); },
-  // kakaoCallback: (req, res) => { /* kakao logic */ },
-  // naverLogin: (req, res, next) => { passport.authenticate('naver', { /* scope */ })(req, res, next); },
-  // naverCallback: (req, res) => { /* naver logic */ },
 };
 
 module.exports = SocialAuthController;
