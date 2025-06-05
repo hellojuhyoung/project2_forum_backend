@@ -2,7 +2,6 @@ const models = require("../models");
 const bcrypt = require("bcrypt");
 const salt = 10;
 
-// <--- START MULTER CONFIGURATION FOR FILE UPLOADS ---
 const multer = require("multer");
 const path = require("path");
 
@@ -42,10 +41,10 @@ const upload = multer({
     }
   },
 }).single("profilePicture");
-// <--- END MULTER CONFIGURATION ---
 
 // function to create user with its username, password, email and other new fields
 async function createUser(req, res) {
+  console.log("backend create user", req.body);
   // Wrap the entire createUser logic within the 'upload' middleware.
   // Multer will process the file upload first, then 'req.body' and 'req.file'
   // will be populated before the rest of your logic runs.
@@ -126,6 +125,8 @@ async function createUser(req, res) {
         occupation: occupation || null,
         preferredLanguage: preferredLanguage || null,
         profilePicture: profilePicturePath, // Store the path to the uploaded image
+        loginMethod: "local",
+        usernameUpdate: false,
       };
 
       // Create the user in the database
@@ -423,10 +424,44 @@ async function getUserPosts(req, res) {
   }
 }
 
+const validateUsername = async (req, res) => {
+  const { username } = req.query;
+
+  if (!username) {
+    return res
+      .status(400)
+      .json({ message: "username query parameter required" });
+  }
+
+  try {
+    const user = await models.Users.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (!user) {
+      return res
+        .status(200)
+        .json({ isAvailable: true, message: "username is available" });
+    } else {
+      return res
+        .status(200)
+        .json({ isAvailable: false, message: "username is already taken" });
+    }
+  } catch (error) {
+    console.error("error checking username availability", error);
+    return res
+      .status(500)
+      .json({ message: "internal server error during username check" });
+  }
+};
+
 module.exports = {
   createUser,
   deleteUser,
   updateUser,
   getUser,
   getUserPosts,
+  validateUsername,
 };

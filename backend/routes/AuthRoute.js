@@ -9,10 +9,9 @@ const passport = require("passport");
 
 // get request
 router.get("/profile", authenticateToken, authController.getProfile);
-// Route to initiate Google OAuth login
-router.get("/google", SocialAuthController.googleLogin);
 
-// Route to handle Google OAuth callback after user authenticates
+// routes to handle google login
+router.get("/google", SocialAuthController.googleLogin);
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -21,7 +20,39 @@ router.get(
   }),
   SocialAuthController.googleCallback // Hand off to the controller method after successful auth
 );
+
+// routes to handle kakao login
+router.get("/kakao", SocialAuthController.kakaoLogin);
+router.get(
+  "/kakao/callback",
+  passport.authenticate("kakao", {
+    failureRedirect: `${process.env.FRONTEND_URL}/login?error=auth_failed`,
+    session: false,
+  }),
+  SocialAuthController.kakaoCallback
+);
+
+// routes to handle naver login
+router.get("/naver", SocialAuthController.naverLogin);
+router.get(
+  "/naver/callback",
+  passport.authenticate("naver", {
+    failureRedirect: `${process.env.FRONTEND_URL}/login?error=auth_failed`,
+    session: false,
+  }),
+  SocialAuthController.naverCallback
+);
+
 // user login
 router.post("/login", authController.login);
+
+// forgot username
+router.post("/forgot/username", authController.findUsername);
+
+// forgot passwrod
+router.post("/request-password-reset", authController.requestPasswordReset);
+
+// reset password
+router.post("/reset-password", authController.resetPassword);
 
 module.exports = router;

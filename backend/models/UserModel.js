@@ -56,11 +56,22 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       loginMethod: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM("local", "google", "kakao", "naver"),
         allowNull: false,
-        validate: {
-          isIn: [["local", "google", "naver", "kakao"]],
-        },
+      },
+      usernameUpdate: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      passwordToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      passwordTokenExpiry: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
     },
     {

@@ -54,8 +54,22 @@ module.exports = {
         allowNull: true,
       },
       loginMethod: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM("local", "google", "kakao", "naver"),
         allowNull: false,
+      },
+      usernameUpdate: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      passwordToken: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      passwordTokenExpiry: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

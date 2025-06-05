@@ -5,7 +5,7 @@ const path = require("path");
 // add cors
 const cors = require("cors");
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: process.env.FRONTEND_URL,
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
