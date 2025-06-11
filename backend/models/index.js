@@ -4,10 +4,28 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.json")[env];
+// const config = require(__dirname + "/../config/config.json")[env];
 const db = {};
 
 let sequelize;
+
+let config; // Declare config variable outside
+
+if (env === "production") {
+  // In production, prioritize environment variables
+  config = {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
+    dialect: "mysql", // Dialect should remain 'mysql'
+    port: process.env.DB_PORT || 3306, // Use DB_PORT if set, otherwise default to 3306
+  };
+} else {
+  // In development or test, load from config.json
+  config = require(__dirname + "/../config/config.json")[env];
+}
+
 const sequelizeLoggingOption = env === "production" ? false : console.log;
 
 if (config.use_env_variable) {

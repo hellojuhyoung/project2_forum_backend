@@ -82,6 +82,7 @@ app.get("/", function (req, res) {
   res.send("hello express");
 });
 
+console.log(process.env.NODE_ENV);
 db.sequelize
   .sync({ alter: false, force: false })
   .then(() => {
@@ -89,6 +90,19 @@ db.sequelize
   })
   .catch(console.error);
 
+// npm run dev for development (local)
+// npm start for production (aws)
 app.listen(port, function () {
-  console.log(`server running on http://localhost:${port}`);
+  // console.log(`server running on http://localhost:${port}`);
+  let serverAddress;
+  if (process.env.NODE_ENV === "production") {
+    // When deployed to AWS, Elastic Beanstalk will assign a public URL
+    // You won't know the exact public IP or domain name at this console.log stage,
+    // so a generic message or just the port is often used.
+    serverAddress = `Server running on AWS (Port: ${port})`;
+  } else {
+    // For local development
+    serverAddress = `Server running on http://localhost:${port}`;
+  }
+  console.log(serverAddress);
 });
