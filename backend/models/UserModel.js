@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.INTEGER,
+        // type: DataTypes.UUID,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
@@ -44,10 +45,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       occupation: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      preferredLanguage: {
         type: DataTypes.STRING,
         allowNull: true,
       },

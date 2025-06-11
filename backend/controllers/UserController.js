@@ -4,6 +4,7 @@ const salt = 10;
 
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
@@ -76,7 +77,6 @@ async function createUser(req, res) {
         phoneNumber,
         dateOfBirth,
         occupation,
-        preferredLanguage,
       } = req.body; // Multer parses form data into req.body
 
       // Ensure required fields are present
@@ -123,7 +123,6 @@ async function createUser(req, res) {
         phoneNumber: phoneNumber || null,
         dateOfBirth: dateOfBirth || null, // Sequelize DATEONLY handles YYYY-MM-DD string
         occupation: occupation || null,
-        preferredLanguage: preferredLanguage || null,
         profilePicture: profilePicturePath, // Store the path to the uploaded image
         loginMethod: "local",
         usernameUpdate: false,
@@ -222,7 +221,6 @@ async function updateUser(req, res) {
         phoneNumber,
         dateOfBirth,
         occupation,
-        preferredLanguage,
         clearProfilePicture, // This flag will be 'true' (as a string) if user wants to remove image
       } = req.body;
 
@@ -238,8 +236,6 @@ async function updateUser(req, res) {
       if (phoneNumber !== undefined) updateFields.phoneNumber = phoneNumber;
       if (dateOfBirth !== undefined) updateFields.dateOfBirth = dateOfBirth; // Store as string (date)
       if (occupation !== undefined) updateFields.occupation = occupation;
-      if (preferredLanguage !== undefined)
-        updateFields.preferredLanguage = preferredLanguage;
 
       // --- Profile Picture Handling Logic ---
       let oldProfilePicturePathInDB = null;

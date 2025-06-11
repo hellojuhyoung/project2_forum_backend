@@ -57,6 +57,8 @@ const authRoutes = require("./routes/AuthRoute");
 const categoryRoutes = require("./routes/CategoryRoute");
 // like route
 const likeRoutes = require("./routes/LikeRoute");
+// payment route
+const paymentRoutes = require("./routes/PaymentRoute");
 // mounting routers
 //
 // mount swagger router
@@ -73,13 +75,15 @@ app.use("/auth", authRoutes);
 app.use("/categories", categoryRoutes);
 // mounting like router
 app.use("/likes", likeRoutes);
+// mounting payment router
+app.use("/toss-payment", paymentRoutes);
 
 app.get("/", function (req, res) {
   res.send("hello express");
 });
 
 db.sequelize
-  .sync({ alter: true })
+  .sync({ alter: false, force: false })
   .then(() => {
     console.log("db conntected");
   })
