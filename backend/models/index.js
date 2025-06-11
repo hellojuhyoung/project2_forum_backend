@@ -38,7 +38,7 @@ if (config.use_env_variable) {
   // and then adding or overriding the logging property
   const sequelizeOptions = {
     ...config, // This spreads all properties from your config.json (host, dialect, etc.)
-    logging: sequelizeLoggingOption, // This adds or overrides the logging property
+    // logging: sequelizeLoggingOption,
   };
 
   sequelize = new Sequelize(
