@@ -26,12 +26,12 @@ if (env === "production") {
   config = require(__dirname + "/../config/config.json")[env];
 }
 
-const sequelizeLoggingOption = env === "production" ? false : console.log;
+// const sequelizeLoggingOption = env === "production" ? false : console.log;
 
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     ...config,
-    logging: sequelizeLoggingOption,
+    // logging: sequelizeLoggingOption,
   });
 } else {
   // Create a new options object by spreading the existing config
