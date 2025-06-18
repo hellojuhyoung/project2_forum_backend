@@ -12,7 +12,7 @@ async function seedCategories(sequelizeInstance) {
       // 1. Check if the category already exists using Sequelize's query method
       //    Adjust 'category' table and 'name' column if needed.
       const [results] = await sequelizeInstance.query(
-        "SELECT id FROM category WHERE name = ?",
+        "SELECT id FROM Categories WHERE label = ?",
         {
           replacements: [categoryName], // Use replacements for safe parameter binding
           type: sequelizeInstance.QueryTypes.SELECT,
@@ -22,7 +22,7 @@ async function seedCategories(sequelizeInstance) {
       if (results.length === 0) {
         // 2. If it doesn't exist, insert the new category
         await sequelizeInstance.query(
-          "INSERT INTO category (name) VALUES (?)",
+          "INSERT INTO Categories (label) VALUES (?)",
           {
             replacements: [categoryName],
             type: sequelizeInstance.QueryTypes.INSERT,
