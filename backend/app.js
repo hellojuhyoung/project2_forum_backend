@@ -10,7 +10,7 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 const app = express();
-const port = process.env.PORT_NUMBER;
+const PORT = process.env.PORT || 5001;
 
 // declare imports for swagger
 const swaggerUi = require("swagger-ui-express"); // 입력
@@ -18,6 +18,9 @@ const swaggerFile = require("./swagger/swagger-output.json"); // 입력
 
 // import database from models
 const db = require("./models");
+
+// for the fixed categories
+const seedCategories = require("./utils/seedCategories");
 
 // for social logins google/kakao/naver
 const passport = require("passport");
@@ -83,26 +86,48 @@ app.get("/", function (req, res) {
 });
 
 console.log(process.env.NODE_ENV);
+// db.sequelize
+//   .sync({ alter: false, force: false })
+//   .then(() => {
+//     console.log("db conntected");
+//   })
+//   .catch(console.error);
+
+// // npm run dev for development (local)
+// // npm start for production (aws)
+// app.listen(PORT, function () {
+//   // console.log(`server running on http://localhost:${port}`);
+//   let serverAddress;
+//   if (process.env.NODE_ENV === "production") {
+//     // When deployed to AWS, Elastic Beanstalk will assign a public URL
+//     // You won't know the exact public IP or domain name at this console.log stage,
+//     // so a generic message or just the port is often used.
+//     serverAddress = `Server running on AWS (Port: ${PORT})`;
+//   } else {
+//     // For local development
+//     serverAddress = `Server running on http://localhost:${PORT}`;
+//   }
+//   console.log(serverAddress);
+// });
+
 db.sequelize
   .sync({ alter: false, force: false })
-  .then(() => {
-    console.log("db conntected");
-  })
-  .catch(console.error);
+  .then(async () => {
+    console.log("db connected");
 
-// npm run dev for development (local)
-// npm start for production (aws)
-app.listen(port, function () {
-  // console.log(`server running on http://localhost:${port}`);
-  let serverAddress;
-  if (process.env.NODE_ENV === "production") {
-    // When deployed to AWS, Elastic Beanstalk will assign a public URL
-    // You won't know the exact public IP or domain name at this console.log stage,
-    // so a generic message or just the port is often used.
-    serverAddress = `Server running on AWS (Port: ${port})`;
-  } else {
-    // For local development
-    serverAddress = `Server running on http://localhost:${port}`;
-  }
-  console.log(serverAddress);
-});
+    await seedCategories(db.sequelize);
+
+    app.listen(PORT, function () {
+      let serverAddress;
+      if (process.env.NODE_ENV === "production") {
+        serverAddress = `Server running on AWS (Port: ${PORT})`;
+      } else {
+        serverAddress = `Server running on http://localhost:${PORT}`;
+      }
+      console.log(serverAddress);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to connect to DB or sync models:", error);
+    process.exit(1);
+  });
