@@ -117,7 +117,7 @@ db.sequelize
 
     await seedCategories(db.sequelize);
 
-    app.listen(PORT, function () {
+    app.listen(PORT, "0.0.0.0", function () {
       let serverAddress;
       if (process.env.NODE_ENV === "production") {
         serverAddress = `Server running on AWS (Port: ${PORT})`;
