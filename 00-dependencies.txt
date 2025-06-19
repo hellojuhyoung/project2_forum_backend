@@ -1,0 +1,28 @@
+# .ebextensions/00-dependencies.config
+
+option_settings:
+  aws:elasticbeanstalk:application:environment:
+    NPM_USE_PRODUCTION_INSTALL: "false"
+  aws:elasticbeanstalk:container:nodejs:
+    NodeCommand: "npm start"
+  aws:autoscaling:launchconfiguration:
+    InstanceType: t4g.micro 
+    IamInstanceProfile: aws-elasticbeanstalk-ec2-role
+
+commands:
+  remove_local_node_modules_from_bundle:
+    command: "rm -rf /tmp/deployment/application/node_modules || true"
+    cwd: "/tmp/deployment/application"
+    leader_only: true
+
+container_commands:
+  00_clean_current_node_modules:
+    command: "rm -rf /var/app/current/node_modules"
+    leader_only: true
+
+
+    GOOGLE_CALLBACK_URL: "http://forum-backend-env.eba-rkkugpwy.ap-southeast-2.elasticbeanstalk.com/auth/google/callback"
+    KAKAO_REDIRECT_URI: "http://forum-backend-env.eba-rkkugpwy.ap-southeast-2.elasticbeanstalk.com/auth/kakao/callback"
+    NAVER_REDIRECT_URL: "http://forum-backend-env.eba-rkkugpwy.ap-southeast-2.elasticbeanstalk.com/auth/naver/callback"
+
+    SESSION_SECRET: "0f1eb2df6b46cb0d0639cda28fecfae08f57503b676045974827366cfd60447b"

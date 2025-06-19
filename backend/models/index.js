@@ -14,12 +14,18 @@ let config; // Declare config variable outside
 if (env === "production") {
   // In production, prioritize environment variables
   config = {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    host: process.env.DB_HOST,
+    // username: process.env.DB_USERNAME,
+    // password: process.env.DB_PASSWORD,
+    // database: process.env.DB_DATABASE,
+    // host: process.env.DB_HOST,
+    // dialect: "mysql", // Dialect should remain 'mysql'
+    // port: process.env.DB_PORT || 3306, // Use DB_PORT if set, otherwise default to 3306
+    username: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD,
+    database: process.env.RDS_DATABASE,
+    host: process.env.RDS_HOST,
     dialect: "mysql", // Dialect should remain 'mysql'
-    port: process.env.DB_PORT || 3306, // Use DB_PORT if set, otherwise default to 3306
+    port: process.env.RDS_PORT || 3306, // Use DB_PORT if set, otherwise default to 3306
   };
 } else {
   // In development or test, load from config.json
