@@ -1,36 +1,26 @@
 const fixedCategories = require("./data/fixedCategories"); // Adjust path as needed
+const models = require("../models");
 
 /**
  * Seeds fixed categories into the database if they don't already exist.
  * @param {object} sequelizeInstance - The Sequelize instance (db.sequelize).
  */
-async function seedCategories(sequelizeInstance) {
+async function seedCategories() {
   console.log("Starting category seeding process...");
 
   for (const categoryName of fixedCategories) {
     try {
-      // 1. Check if the category already exists using Sequelize's query method
-      //    Adjust 'category' table and 'name' column if needed.
-      const [results] = await sequelizeInstance.query(
-        "SELECT id FROM Categories WHERE label = ?",
-        {
-          replacements: [categoryName], // Use replacements for safe parameter binding
-          type: sequelizeInstance.QueryTypes.SELECT,
-        }
-      );
+      // Use Sequelize's findOne method directly on the Categories model
+      const existingCategory = await models.Categories.findOne({
+        where: { label: categoryName },
+      });
 
-      if (results.length === 0) {
-        // 2. If it doesn't exist, insert the new category
-        await sequelizeInstance.query(
-          "INSERT INTO Categories (label) VALUES (?)",
-          {
-            replacements: [categoryName],
-            type: sequelizeInstance.QueryTypes.INSERT,
-          }
-        );
+      // If existingCategory is null (meaning not found), then create it
+      if (!existingCategory) {
+        // This checks if existingCategory is null or undefined
+        await models.Categories.create({ label: categoryName });
         console.log(`Inserted new category: ${categoryName}`);
       } else {
-        // 3. If it already exists, skip insertion
         console.log(`Category already exists: ${categoryName}`);
       }
     } catch (error) {
