@@ -22,7 +22,7 @@ if (env === "production") {
     // port: process.env.DB_PORT || 3306, // Use DB_PORT if set, otherwise default to 3306
     username: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
-    database: process.env.RDS_DATABASE,
+    database: process.env.RDS_DB_NAME,
     host: process.env.RDS_HOST,
     dialect: "mysql", // Dialect should remain 'mysql'
     port: process.env.RDS_PORT || 3306, // Use DB_PORT if set, otherwise default to 3306
