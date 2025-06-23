@@ -8,3 +8,8 @@ uploads
 
 privatekey.pem
 server.crt
+
+beanstalk.txt
+postman.txt
+00-dependencies.txt
+
