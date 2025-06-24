@@ -13,3 +13,5 @@ beanstalk.txt
 postman.txt
 00-dependencies.txt
 
+*.zip
+
