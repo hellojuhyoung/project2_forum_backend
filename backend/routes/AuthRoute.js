@@ -47,7 +47,7 @@ router.get(
 router.post("/login", authController.login);
 
 // user logout
-router.post("/auth/logout", authController.logout);
+router.post("/logout", authController.logout);
 
 // forgot username
 router.post("/forgot/username", authController.findUsername);
