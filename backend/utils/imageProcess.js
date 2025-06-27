@@ -14,14 +14,14 @@ async function saveBase64Image(base64String, isThumbnail = false) {
 
   const filename = `${uuidv4()}.${ext}`;
   const folder = isThumbnail ? "thumbnails" : "images";
-  const rootUploadsDir = path.join(__dirname, "..", "uploads");
+  // const rootUploadsDir = path.join(__dirname, "..", "uploads");
   const uploadsDir = path.join(__dirname, "..", "uploads", folder);
   const filepath = path.join(uploadsDir, filename);
   const publicPath = `/uploads/${folder}/${filename}`;
 
-  if (!fs.existsSync(rootUploadsDir)) {
-    fs.mkdirSync(rootUploadsDir, { recursive: true });
-  }
+  // if (!fs.existsSync(rootUploadsDir)) {
+  //   fs.mkdirSync(rootUploadsDir, { recursive: true });
+  // }
 
   if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
