@@ -6,11 +6,24 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+// multer is trying to find the directory of /uploads/profile
+// prior to having the server fired up with the folder profile
+// so add the conditionals to handle the multer actions
+
+const profile_directory = path.join(__dirname, "..", "uploads", "profile");
+
+// Ensure the upload directory exists
+// This will create 'uploads/' and 'uploads/profile/' if they don't already exist.
+if (!fs.existsSync(profile_directory)) {
+  fs.mkdirSync(profile_directory, { recursive: true });
+  console.log(`Created upload directory: ${profile_directory}`);
+}
+
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Files will be stored in 'uploads/profile/'
-    cb(null, "uploads/profile/");
+    cb(null, profile_directory);
   },
   filename: (req, file, cb) => {
     // Generate a unique filename: fieldname-timestamp.ext
