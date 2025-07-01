@@ -27,8 +27,8 @@ const SocialAuthController = {
     res.cookie("token", appToken, {
       maxAge: 1000 * 60 * 60, // 1 hour
       httpOnly: false,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "None",
     });
 
     // 2. Determine redirect URL based on whether it's a new user
@@ -72,8 +72,8 @@ const SocialAuthController = {
     res.cookie("token", appToken, {
       maxAge: 1000 * 60 * 60, // 1 hour
       httpOnly: false,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "None",
     });
 
     let redirectUrl = `${process.env.FRONTEND_URL}`;
@@ -119,8 +119,8 @@ const SocialAuthController = {
     res.cookie("token", appToken, {
       maxAge: 1000 * 60 * 60, // 1 hour
       httpOnly: false,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "None",
     });
 
     let redirectUrl = `${process.env.FRONTEND_URL}`;
