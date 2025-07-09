@@ -1,3 +1,6 @@
 to open ssh
 ssh -i forum-backend-eb-key-2.pem ec2-user@13.54.175.126
 
+
+ssh -i forum-backend-eb-key-2.pem ec2-user@16.176.45.207
+
