@@ -2,31 +2,14 @@
 # This script creates the custom Nginx configuration file for SSL termination.
 # It runs during the prebuild hook phase of Elastic Beanstalk deployment.
 
-# Enable verbose debugging for this script
-set -x
-
-echo "Starting creation of custom Nginx configuration file..."
+echo "Attempting to create Nginx configuration file using sudo sh -c..."
 
 # Define the target file path
 NGINX_CONFIG_FILE="/etc/nginx/conf.d/elasticbeanstalk-nginx-http-https.conf"
 
-# Check if the directory exists and is writable (for debugging purposes)
-echo "Checking if directory $(dirname $NGINX_CONFIG_FILE) exists..."
-if [ -d "$(dirname $NGINX_CONFIG_FILE)" ]; then
-  echo "Directory $(dirname $NGINX_CONFIG_FILE) exists."
-  echo "Checking permissions for $(dirname $NGINX_CONFIG_FILE)..."
-  ls -ld "$(dirname $NGINX_CONFIG_FILE)"
-else
-  echo "Directory $(dirname $NGINX_CONFIG_FILE) DOES NOT exist. This is unexpected!"
-  # Attempt to create it, though it should exist
-  sudo mkdir -p "$(dirname $NGINX_CONFIG_FILE)" || { echo "Failed to create directory!"; exit 1; }
-fi
-
-echo "Attempting to create Nginx configuration file: $NGINX_CONFIG_FILE"
-
-# Use 'cat <<EOF' to write the multi-line Nginx configuration directly to the file.
-# Using 'sudo tee' ensures it's written with root privileges.
-cat <<EOF | sudo tee $NGINX_CONFIG_FILE > /dev/null
+# Use 'sudo sh -c' to execute the entire cat <<EOF block as root.
+# This provides a more robust execution context for file creation.
+sudo sh -c "cat <<'EOF_INNER' > $NGINX_CONFIG_FILE
 # Redirect all HTTP traffic on port 80 to HTTPS on port 443
 server {
   listen 80;
@@ -76,15 +59,6 @@ server {
     # The problematic 'proxy_set_header Connection "upgrade";' line is correctly removed here.
   }
 }
-EOF
-
-# Verify the file was created (for debugging)
-echo "Verifying file creation..."
-if [ -f "$NGINX_CONFIG_FILE" ]; then
-  echo "File $NGINX_CONFIG_FILE created successfully."
-  ls -l $NGINX_CONFIG_FILE # List file details
-else
-  echo "File $NGINX_CONFIG_FILE WAS NOT created. This is the problem!"
-fi
+EOF_INNER"
 
 echo "Finished creation script."
