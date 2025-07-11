@@ -1,5 +1,16 @@
 require("dotenv").config();
 
+// Add HTTPS redirect middleware and enable trust proxy in Express backend
+const app = express();
+app.enable("trust proxy");
+
+app.use((req, res, next) => {
+  if (req.protocol !== "https") {
+    return res.redirect(`https://${req.headers.host}${req.originalUrl}`);
+  }
+  next();
+});
+
 const express = require("express");
 const path = require("path");
 // add cors
@@ -10,7 +21,7 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
-const app = express();
+
 const PORT = process.env.PORT || 5001;
 
 // declare imports for swagger
