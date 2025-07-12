@@ -1,12 +1,22 @@
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
 require("dotenv").config();
 
 // Add HTTPS redirect middleware and enable trust proxy in Express backend
 const app = express();
 
-const express = require("express");
-const path = require("path");
+app.enable("trust proxy");
+
+// app.use((req, res, next) => {
+//   if (req.protocol !== "https") {
+//     return res.redirect(`https://${req.headers.host}${req.originalUrl}`);
+//   }
+//   next();
+// });
+
 // add cors
-const cors = require("cors");
+
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
