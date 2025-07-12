@@ -4,12 +4,12 @@ require("dotenv").config();
 const app = express();
 app.enable("trust proxy");
 
-app.use((req, res, next) => {
-  if (req.protocol !== "https") {
-    return res.redirect(`https://${req.headers.host}${req.originalUrl}`);
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (req.protocol !== "https") {
+//     return res.redirect(`https://${req.headers.host}${req.originalUrl}`);
+//   }
+//   next();
+// });
 
 const express = require("express");
 const path = require("path");
