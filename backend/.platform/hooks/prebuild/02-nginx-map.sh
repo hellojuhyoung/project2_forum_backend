@@ -12,7 +12,7 @@ EOF
 cat << 'EOF' > /etc/nginx/conf.d/02_force_https.conf
 server {
     listen 80;
-    server_name _;
+    server_name forum-backend-env.eba-rkkugpwy.ap-southeast-2.elasticbeanstalk.com;
 
     location /.well-known/acme-challenge/ {
         root /usr/share/nginx/html;
