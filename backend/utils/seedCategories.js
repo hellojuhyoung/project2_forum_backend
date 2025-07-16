@@ -5,6 +5,10 @@ const models = require("../models");
  * Seeds fixed categories into the database if they don't already exist.
  * @param {object} sequelizeInstance - The Sequelize instance (db.sequelize).
  */
+
+console.log("Starting category seeding process...");
+console.log("Fixed categories to process:", fixedCategories);
+
 async function seedCategories() {
   console.log("Starting category seeding process...");
 
@@ -18,7 +22,9 @@ async function seedCategories() {
       // If existingCategory is null (meaning not found), then create it
       if (!existingCategory) {
         // This checks if existingCategory is null or undefined
-        await models.Categories.create({ label: categoryName });
+        await models.Categories.create({
+          label: categoryName,
+        });
         console.log(`Inserted new category: ${categoryName}`);
       } else {
         console.log(`Category already exists: ${categoryName}`);

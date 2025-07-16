@@ -11,8 +11,16 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Likes.associate = (db) => {
-    Likes.belongsTo(db.Users, { foreignKey: "userid" });
-    Likes.belongsTo(db.Posts, { foreignKey: "postid" });
+    Likes.belongsTo(db.Users, {
+      foreignKey: "userid",
+      onDelete: "cascade",
+      hooks: true,
+    });
+    Likes.belongsTo(db.Posts, {
+      foreignKey: "postid",
+      onDelete: "cascade",
+      hooks: true,
+    });
   };
   return Likes;
 };

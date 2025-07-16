@@ -1,4 +1,12 @@
 node_modules/
 .env
 .git/
-.gitignore
+
+
+    # Exclude all files and directories that are in .gitignore by default
+    # This line tells Elastic Beanstalk to use the .gitignore rules
+    .gitignore
+
+    # EXCEPTION: Explicitly include the 'uploads' directory
+    # The '!' prefix means "don't ignore this"
+    !uploads/
