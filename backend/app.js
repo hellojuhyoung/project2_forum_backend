@@ -54,7 +54,27 @@ app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
 // serve 'uploads' folder statically at the '/uploads' route
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// need to modify the line where you serve your static uploads content.
+// Instead of just express.static, you should insert a small middleware function before
+// express.static that adds the necessary CORS headers.
+app.use(
+  "/uploads",
+  (req, res, next) => {
+    // Manually add the Access-Control-Allow-Origin header based on your configured frontend URL
+    res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
+    // You might also want to add these, though Origin is usually the main one for GET requests
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,PUT,PATCH,POST,DELETE"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next(); // Pass control to the next middleware in the chain (express.static)
+  },
+  express.static(path.join(__dirname, "uploads"))
+);
 
 // session middleware
 app.use(sessionMiddleware);
