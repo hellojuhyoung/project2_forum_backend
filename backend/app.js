@@ -59,20 +59,7 @@ app.use(cookieParser());
 // express.static that adds the necessary CORS headers.
 app.use(
   "/uploads",
-  (req, res, next) => {
-    // Manually add the Access-Control-Allow-Origin header based on your configured frontend URL
-    res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
-    // You might also want to add these, though Origin is usually the main one for GET requests
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET,HEAD,PUT,PATCH,POST,DELETE"
-    );
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next(); // Pass control to the next middleware in the chain (express.static)
-  },
+  cors(corsOptions),
   express.static(path.join(__dirname, "uploads"))
 );
 
