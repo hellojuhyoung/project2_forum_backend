@@ -5,6 +5,16 @@ const { resizeImage, saveBase64Image } = require("../utils/imageProcess");
 const path = require("path");
 const fs = require("fs");
 
+// Helper function to extract the first image URL from Markdown content
+function extractImageUrlFromMarkdown(markdownContent) {
+  // Regex to find Markdown image syntax: ![alt text](url)
+  // It specifically looks for URLs starting with http:// or https://
+  const imageRegex =
+    /!\[.*?\]\((https?:\/\/[^\s)]+\.(?:jpg|jpeg|png|gif|webp|svg))\)/;
+  const match = markdownContent.match(imageRegex);
+  return match ? match[1] : null; // Return the URL part (group 1) or null if no match
+}
+
 // function to create posts with its title, content, thumbnail, contentImage
 async function createPost(req, res) {
   try {
@@ -19,12 +29,18 @@ async function createPost(req, res) {
     // the PostImages table with the post.id
     let postImagesData = [];
 
-    if (images && images.length > 0) {
-      // Save thumbnail from the first image
+    const imageUrlFromContent = extractImageUrlFromMarkdown(content);
+    if (imageUrlFromContent) {
+      thumbnailPath = imageUrlFromContent; // Use the absolute URL from the editor content
+    }
+    // --- OLD LOGIC (retained for backward compatibility or separate image uploads):
+    // Only process `images` array if no image was found in content AND `images` array exists
+    else if (images && images.length > 0) {
+      // Save thumbnail from the first image in the `images` array
       const thumbnailResult = await saveBase64Image(images[0], true);
       thumbnailPath = thumbnailResult.publicPath;
 
-      // Save all images
+      // Save all images from the `images` array
       const savedImages = await Promise.all(
         images.map((img) => saveBase64Image(img, false))
       );
@@ -85,33 +101,49 @@ async function updatePost(req, res) {
     const { title, content, userid, categoryid, images } = req.body;
     const { id } = req.params;
 
-    let thumbnailPath = null;
-    let postImagesData = [];
+    // First, find the post to ensure it exists and belongs to the user
+    const post = await models.Posts.findOne({
+      where: { id: id, userid: userid }, // Using existing `userid` casing
+    });
 
-    // Check if images exist or is an empty array
-    if (images) {
-      // 1. Get existing images from DB
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found or you don't have permission to update.",
+      });
+    }
+
+    let newThumbnailPath = null; // Start fresh for thumbnail
+    let postImagesData = []; // To hold data for PostImages if needed
+
+    // --- NEW LOGIC: Prioritize extracting thumbnail from updated editor content ---
+    const imageUrlFromNewContent = extractImageUrlFromMarkdown(content);
+    if (imageUrlFromNewContent) {
+      newThumbnailPath = imageUrlFromNewContent;
+    }
+    // --- OLD LOGIC (retained for backward compatibility or separate image uploads):
+    // Only process `images` array if no image was found in content AND `images` array exists
+    else if (images) {
+      // Check if `images` array was provided (even if empty)
+      // If `images` array is provided, it implies a new set of images for the PostImages table.
+      // So, clear existing images from disk and DB first.
       const existingImages = await models.PostImages.findAll({
         where: { postid: id },
       });
 
-      // 2. Delete files from disk
       for (const img of existingImages) {
         const imgPath = path.join(__dirname, "..", img.postImage);
         if (fs.existsSync(imgPath)) {
           fs.unlinkSync(imgPath);
         }
       }
-
-      // 3. Delete from DB
       await models.PostImages.destroy({ where: { postid: id } });
 
       if (images.length > 0) {
-        // 4. Save new thumbnail from first image
+        // Save new thumbnail from first image in the provided `images` array
         const thumbnailResult = await saveBase64Image(images[0], true);
-        thumbnailPath = thumbnailResult.publicPath;
+        newThumbnailPath = thumbnailResult.publicPath;
 
-        // 5. Save new images to disk
+        // Save new images to disk from the `images` array
         const savedImages = await Promise.all(
           images.map((img) => saveBase64Image(img, false))
         );
@@ -121,22 +153,23 @@ async function updatePost(req, res) {
           postid: id,
         }));
 
-        // 6. Insert new post images into DB
+        // Insert new post images into DB
         await models.PostImages.bulkCreate(postImagesData);
       } else {
-        // No images, so clear thumbnail path
-        thumbnailPath = null;
+        // If `images` array was provided but empty, explicitly clear thumbnail
+        newThumbnailPath = null;
       }
     }
+    // If no `images` array provided AND no image in new content, thumbnail remains whatever it was or null
 
-    // 7. Update the post itself
-    await models.Posts.update(
+    // Update the post itself
+    await post.update(
       {
         title,
         content,
-        thumbnail: thumbnailPath,
-        userid,
-        categoryid,
+        thumbnail: newThumbnailPath, // Use the determined thumbnail path
+        userid: userid, // Using existing `userid` casing
+        categoryid: categoryid, // Using existing `categoryid` casing
       },
       { where: { id } }
     );
