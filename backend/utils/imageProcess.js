@@ -1,3 +1,4 @@
+// /Users/juhyounglee/Documents/GitHub/project2_forum_backend/backend/utils/imageProcess.js
 // to process the image use the sharp library
 const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");

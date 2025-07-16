@@ -1,3 +1,4 @@
+// backend/app.js
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -42,6 +43,7 @@ const session = require("express-session");
 const setupPassport = require("./auth/passportConfig");
 const sessionMiddleware = require("./middlewares/sessionMiddleware");
 const cookieParser = require("cookie-parser");
+const imageUploadRoutes = require("./routes/ImageUploadRoute");
 
 // let server to use cors
 // this is to prevent front to share the same resources with
@@ -101,6 +103,8 @@ app.use("/categories", categoryRoutes);
 app.use("/likes", likeRoutes);
 // mounting payment router
 app.use("/toss-payment", paymentRoutes);
+// mounting image uploading router
+app.use("/api", imageUploadRoutes);
 
 app.get("/", function (req, res) {
   res.send("hello express");

@@ -1,3 +1,4 @@
+// backend/controllers/PostController.js
 const models = require("../models");
 
 const { resizeImage, saveBase64Image } = require("../utils/imageProcess");
