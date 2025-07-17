@@ -9,9 +9,29 @@ uploads
 privatekey.pem
 server.crt
 
+
 beanstalk.txt
 postman.txt
 00-dependencies.txt
 
 *.zip
 
+# Environment variables
+.env
+.env.*.local # Catches .env.local, .env.development.local, etc.
+.env.production
+.env.development
+.env.test
+
+# Specific secret files (add any others you use)
+*.pem # Already have privatekey.pem, but this is more general
+*.key
+*.cert
+*.crt # Already have server.crt, but this is more general
+*.json # Be careful with this - only if you know your JSONs are always secrets,
+       # otherwise, you'll ignore important config files. Better to be specific
+       # e.g., google-credentials.json or service-account.json
+
+# If you use specific config files for secrets
+config/secrets.js
+src/config/api_keys.js

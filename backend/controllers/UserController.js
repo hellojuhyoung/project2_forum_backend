@@ -1,3 +1,5 @@
+// backend/controllers/UserController.js
+
 const models = require("../models");
 const bcrypt = require("bcrypt");
 const salt = 10;
