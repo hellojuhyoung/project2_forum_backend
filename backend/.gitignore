@@ -39,6 +39,7 @@ src/config/api_keys.js
 
 # GitGuardian flagged files to ignore
 .env
+.ebextensions
 forum-backend-eb-key-2.pem
 .ebextensions/04-cert_files.config
 auth/AuthController.js
