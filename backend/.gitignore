@@ -1,4 +1,5 @@
 node_modules
+.ebextensions
 
 uploads
 # Elastic Beanstalk Files
