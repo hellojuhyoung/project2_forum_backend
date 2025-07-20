@@ -3,6 +3,7 @@ node_modules/
 .git/
 
 
+
     # Exclude all files and directories that are in .gitignore by default
     # This line tells Elastic Beanstalk to use the .gitignore rules
     .gitignore
