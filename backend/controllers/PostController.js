@@ -58,6 +58,10 @@ async function createPost(req, res) {
       thumbnailPath = null; // Or set a default placeholder like "/no-image.jpg"
     }
 
+    console.log(
+      `[DEBUG - PostController] Final thumbnailPath for database: ${thumbnailPath}`
+    );
+
     const post = await models.Posts.create({
       title: title,
       content: content,

@@ -62,16 +62,54 @@ async function saveImageUrl(imageUrl, isThumbnail = false) {
       fs.mkdirSync(uploadsDir, { recursive: true });
     }
 
-    if (isThumbnail) {
-      await sharp(imageBuffer).resize(334, 220).toFile(filepath);
-    } else {
-      fs.writeFileSync(filepath, imageBuffer); // Save original size if not thumbnail
+    //   if (isThumbnail) {
+    //     await sharp(imageBuffer).resize(334, 220).toFile(filepath);
+    //   } else {
+    //     fs.writeFileSync(filepath, imageBuffer); // Save original size if not thumbnail
+    //   }
+
+    //   return { filename, publicPath };
+    // } catch (error) {
+    //   console.error(`Error in saveImageUrl for ${imageUrl}:`, error);
+    //   throw error; // Re-throw to be caught by the calling controller
+    // }
+
+    try {
+      if (isThumbnail) {
+        console.log(
+          `[DEBUG - saveImageUrl] Attempting Sharp resize for thumbnail to: ${filepath}`
+        );
+        await sharp(imageBuffer).resize(334, 220).toFile(filepath); // Resizing
+        console.log(
+          `[DEBUG - saveImageUrl] Successfully created thumbnail at: ${filepath}`
+        );
+      } else {
+        console.log(
+          `[DEBUG - saveImageUrl] Saving original image to: ${filepath}`
+        );
+        fs.writeFileSync(filepath, imageBuffer); // Original image save
+        console.log(
+          `[DEBUG - saveImageUrl] Successfully saved original image to: ${filepath}`
+        );
+      }
+    } catch (sharpOrWriteError) {
+      console.error(
+        `[DEBUG - saveImageUrl] ERROR during Sharp/file write for ${
+          isThumbnail ? "thumbnail" : "original"
+        }:`,
+        sharpOrWriteError
+      );
+      throw sharpOrWriteError; // Re-throw to be caught higher up
     }
 
+    console.log(`[DEBUG - saveImageUrl] Returning publicPath: ${publicPath}`);
     return { filename, publicPath };
   } catch (error) {
-    console.error(`Error in saveImageUrl for ${imageUrl}:`, error);
-    throw error; // Re-throw to be caught by the calling controller
+    console.error(
+      `[DEBUG - saveImageUrl] Unhandled error for URL ${imageUrl}:`,
+      error
+    );
+    throw error;
   }
 }
 
