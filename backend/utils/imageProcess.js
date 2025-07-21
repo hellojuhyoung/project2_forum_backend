@@ -3,7 +3,6 @@ const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const path = require("path");
-const fetch = require("node-fetch");
 
 async function saveBase64Image(base64String, isThumbnail = false) {
   const matches = base64String.match(/^data:(image\/\w+);base64,(.+)$/);
