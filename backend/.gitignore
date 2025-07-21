@@ -42,6 +42,6 @@ src/config/api_keys.js
 .ebextensions # This will ignore the entire directory from now on
 forum-backend-eb-key-2.pem
 .ebextensions/04-cert_files.config # This will ignore the specific config file inside .ebextensions
-auth/AuthController.js
+
 # AutoReadMe logs
 /Users/Juhyounglee/.autoreadme
