@@ -421,7 +421,7 @@
 			</thead>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='/openssl_san.cnf'>openssl_san.cnf</a></b></td>
-					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+					<td style='padding: 8px;'>- Openssl_san.cnf<code> configures the generation of an SSL/TLS certificate<br>- It specifies key parameters, distinguished name attributes (like organization and location), and importantly, Subject Alternative Names (SANs)<br>- The SANs define additional domain names associated with the certificate, enabling secure communication for multiple hostnames, such as </code>forum-backend-env.eba-rkkugpwy.ap-southeast-2.elasticbeanstalk.com` in this instance<br>- This ensures proper server authentication within the projects infrastructure.</td>
 				</tr>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='/swagger.js'>swagger.js</a></b></td>
