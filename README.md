@@ -3,7 +3,7 @@
 <!-- HEADER STYLE: CLASSIC -->
 <div align="center">
 
-<img src="http://googleusercontent.com/file_content/35" width="15%" alt="JL Logo"/>
+<img src="./forum_logo4.png" width="15%" alt="JL Forum Logo"/>
 
 # <code>❯ JL Forum Backend API</code>
 
