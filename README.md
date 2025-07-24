@@ -1,284 +1,886 @@
 <div id="top">
 
 <!-- HEADER STYLE: CLASSIC -->
-
 <div align="center">
 
-<img src="https://placehold.co/150x150/8A2BE2/FFFFFF?text=Backend+Logo" alt="Project Logo" width="150">
+<img src="readmeai/assets/logos/purple.svg" width="30%" style="position: relative; top: 0; right: 0;" alt="Project Logo"/>
 
-JL Forum Backend
-The robust Node.js/Express.js backend for the JL Forum application, handling user authentication, post management, image processing, and payment functionalities, deployed on AWS Elastic Beanstalk.
+# <code>❯ REPLACE-ME</code>
+
+<em></em>
 
 <!-- BADGES -->
+<!-- local repository, no metadata badges. -->
 
-<!-- You can customize these badges. The ones generated are based on detected technologies. -->
+<em>Built with the tools and technologies:</em>
 
-<!-- Add more relevant badges like deployment status, license, etc. -->
-
-Built with the following key technologies:
-
-<img src="https://img.shields.io/badge/Node.js-339933.svg?style=flat-square&logo=Node.js&logoColor=white" alt="Node.js">
-<img src="https://img.shields.io/badge/Express.js-000000.svg?style=flat-square&logo=Express&logoColor=white" alt="Express.js">
-<img src="https://img.shields.io/badge/MySQL-4479A1.svg?style=flat-square&logo=MySQL&logoColor=white" alt="MySQL">
-<img src="https://img.shields.io/badge/AWS_RDS-52B0E7.svg?style=flat-square&logo=Amazon-RDS&logoColor=white" alt="AWS RDS">
-<img src="https://img.shields.io/badge/Sequelize-52B0E7.svg?style=flat-square&logo=Sequelize&logoColor=white" alt="Sequelize">
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=flat-square&logo=JavaScript&logoColor=black" alt="JavaScript">
-<img src="https://img.shields.io/badge/AWS_Elastic_Beanstalk-232F3E.svg?style=flat-square&logo=Amazon-AWS&logoColor=white" alt="AWS Elastic Beanstalk">
-<img src="https://img.shields.io/badge/sharp-99CC00.svg?style=flat-square&logo=sharp&logoColor=white" alt="sharp">
-<img src="https://img.shields.io/badge/Passport.js-34E27A.svg?style=flat-square&logo=Passport&logoColor=white" alt="Passport.js">
-<img src="https://img.shields.io/badge/Axios-5A29E4.svg?style=flat-square&logo=Axios&logoColor=white" alt="Axios">
-<img src="https://img.shields.io/badge/Nodemon-76D04B.svg?style=flat-square&logo=Nodemon&logoColor=white" alt="Nodemon">
-<img src="https://img.shields.io/badge/.ENV-ECD53F.svg?style=flat-square&logo=dotenv&logoColor=black" alt=".ENV">
+<img src="https://img.shields.io/badge/Express-000000.svg?style=default&logo=Express&logoColor=white" alt="Express">
+<img src="https://img.shields.io/badge/JSON-000000.svg?style=default&logo=JSON&logoColor=white" alt="JSON">
+<img src="https://img.shields.io/badge/npm-CB3837.svg?style=default&logo=npm&logoColor=white" alt="npm">
+<img src="https://img.shields.io/badge/.ENV-ECD53F.svg?style=default&logo=dotenv&logoColor=black" alt=".ENV">
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=default&logo=JavaScript&logoColor=black" alt="JavaScript">
+<br>
+<img src="https://img.shields.io/badge/sharp-99CC00.svg?style=default&logo=sharp&logoColor=white" alt="sharp">
+<img src="https://img.shields.io/badge/Nodemon-76D04B.svg?style=default&logo=Nodemon&logoColor=white" alt="Nodemon">
+<img src="https://img.shields.io/badge/Passport-34E27A.svg?style=default&logo=Passport&logoColor=white" alt="Passport">
+<img src="https://img.shields.io/badge/Sequelize-52B0E7.svg?style=default&logo=Sequelize&logoColor=white" alt="Sequelize">
+<img src="https://img.shields.io/badge/Axios-5A29E4.svg?style=default&logo=Axios&logoColor=white" alt="Axios">
 
 </div>
 <br>
 
-Table of Contents
-Overview
+---
 
-Features
+## Table of Contents
 
-Project Structure
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
+  - [Project Index](#project-index)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Testing](#testing)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
-Getting Started
+---
 
-Prerequisites
+## Overview
 
-Installation
+---
 
-Configuration
+## Features
 
-Usage
+<code>❯ REPLACE-ME</code>
 
-Testing
+---
 
-Deployment
+## Project Structure
 
-Roadmap
+```sh
+└── /
+    ├── app.js
+    ├── auth
+    │   ├── AuthController.js
+    │   ├── SocialAuthController.js
+    │   └── passportConfig.js
+    ├── config
+    │   ├── config.js
+    │   └── config.json
+    ├── controllers
+    │   ├── CategoryController.js
+    │   ├── ImageController.js
+    │   ├── LikeController.js
+    │   ├── PaymentController.js
+    │   ├── PostController.js
+    │   └── UserController.js
+    ├── forum-backend-env.env.yml
+    ├── middlewares
+    │   ├── AuthMiddleware.js
+    │   └── sessionMiddleware.js
+    ├── migrations
+    │   ├── 20250428064947-create-user.js
+    │   ├── 20250428090000-create-category.js
+    │   ├── 20250428094449-create-post.js
+    │   ├── 20250522070405-create-post-images.js
+    │   └── 20250527103428-create-likes.js
+    ├── models
+    │   ├── CategoryModel.js
+    │   ├── LikeModel.js
+    │   ├── PostImagesModel.js
+    │   ├── PostModel.js
+    │   ├── UserModel.js
+    │   └── index.js
+    ├── node_modules
+    │   ├── .bin
+    │   ├── .package-lock.json
+    │   ├── @img
+    │   ├── @isaacs
+    │   ├── @mapbox
+    │   ├── @one-ini
+    │   ├── @pkgjs
+    │   ├── @scarf
+    │   ├── @types
+    │   ├── abbrev
+    │   ├── accepts
+    │   ├── acorn
+    │   ├── agent-base
+    │   ├── ansi-regex
+    │   ├── ansi-styles
+    │   ├── anymatch
+    │   ├── append-field
+    │   ├── aproba
+    │   ├── are-we-there-yet
+    │   ├── asynckit
+    │   ├── at-least-node
+    │   ├── aws-ssl-profiles
+    │   ├── axios
+    │   ├── balanced-match
+    │   ├── base64url
+    │   ├── bcrypt
+    │   ├── binary-extensions
+    │   ├── bluebird
+    │   ├── body-parser
+    │   ├── brace-expansion
+    │   ├── braces
+    │   ├── buffer-equal-constant-time
+    │   ├── buffer-from
+    │   ├── busboy
+    │   ├── bytes
+    │   ├── call-bind-apply-helpers
+    │   ├── call-bound
+    │   ├── chokidar
+    │   ├── chownr
+    │   ├── cliui
+    │   ├── color
+    │   ├── color-convert
+    │   ├── color-name
+    │   ├── color-string
+    │   ├── color-support
+    │   ├── combined-stream
+    │   ├── commander
+    │   ├── concat-map
+    │   ├── concat-stream
+    │   ├── config-chain
+    │   ├── console-control-strings
+    │   ├── content-disposition
+    │   ├── content-type
+    │   ├── cookie
+    │   ├── cookie-parser
+    │   ├── cookie-signature
+    │   ├── cors
+    │   ├── cross-env
+    │   ├── cross-spawn
+    │   ├── debug
+    │   ├── deepmerge
+    │   ├── delayed-stream
+    │   ├── delegates
+    │   ├── denque
+    │   ├── depd
+    │   ├── detect-libc
+    │   ├── dotenv
+    │   ├── dottie
+    │   ├── dunder-proto
+    │   ├── eastasianwidth
+    │   ├── ecdsa-sig-formatter
+    │   ├── editorconfig
+    │   ├── ee-first
+    │   ├── emoji-regex
+    │   ├── encodeurl
+    │   ├── es-define-property
+    │   ├── es-errors
+    │   ├── es-object-atoms
+    │   ├── es-set-tostringtag
+    │   ├── escalade
+    │   ├── escape-html
+    │   ├── etag
+    │   ├── express
+    │   ├── express-session
+    │   ├── fill-range
+    │   ├── finalhandler
+    │   ├── follow-redirects
+    │   ├── foreground-child
+    │   ├── form-data
+    │   ├── forwarded
+    │   ├── fresh
+    │   ├── fs-extra
+    │   ├── fs-minipass
+    │   ├── fs.realpath
+    │   ├── fsevents
+    │   ├── function-bind
+    │   ├── gauge
+    │   ├── generate-function
+    │   ├── get-caller-file
+    │   ├── get-intrinsic
+    │   ├── get-proto
+    │   ├── glob
+    │   ├── glob-parent
+    │   ├── gopd
+    │   ├── graceful-fs
+    │   ├── has-flag
+    │   ├── has-symbols
+    │   ├── has-tostringtag
+    │   ├── has-unicode
+    │   ├── hasown
+    │   ├── http-errors
+    │   ├── https-proxy-agent
+    │   ├── iconv-lite
+    │   ├── ignore-by-default
+    │   ├── inflection
+    │   ├── inflight
+    │   ├── inherits
+    │   ├── ini
+    │   ├── ipaddr.js
+    │   ├── is-arrayish
+    │   ├── is-binary-path
+    │   ├── is-core-module
+    │   ├── is-extglob
+    │   ├── is-fullwidth-code-point
+    │   ├── is-glob
+    │   ├── is-number
+    │   ├── is-promise
+    │   ├── is-property
+    │   ├── isexe
+    │   ├── jackspeak
+    │   ├── js-beautify
+    │   ├── js-cookie
+    │   ├── json5
+    │   ├── jsonfile
+    │   ├── jsonwebtoken
+    │   ├── jwa
+    │   ├── jws
+    │   ├── lodash
+    │   ├── lodash.includes
+    │   ├── lodash.isboolean
+    │   ├── lodash.isinteger
+    │   ├── lodash.isnumber
+    │   ├── lodash.isplainobject
+    │   ├── lodash.isstring
+    │   ├── lodash.once
+    │   ├── long
+    │   ├── lru-cache
+    │   ├── lru.min
+    │   ├── make-dir
+    │   ├── math-intrinsics
+    │   ├── media-typer
+    │   ├── merge-descriptors
+    │   ├── mime-db
+    │   ├── mime-types
+    │   ├── minimatch
+    │   ├── minimist
+    │   ├── minipass
+    │   ├── minizlib
+    │   ├── mkdirp
+    │   ├── moment
+    │   ├── moment-timezone
+    │   ├── ms
+    │   ├── multer
+    │   ├── mysql2
+    │   ├── named-placeholders
+    │   ├── negotiator
+    │   ├── node-addon-api
+    │   ├── nodemailer
+    │   ├── nodemon
+    │   ├── nopt
+    │   ├── normalize-path
+    │   ├── npmlog
+    │   ├── oauth
+    │   ├── object-assign
+    │   ├── object-inspect
+    │   ├── on-finished
+    │   ├── on-headers
+    │   ├── once
+    │   ├── package-json-from-dist
+    │   ├── parseurl
+    │   ├── passport
+    │   ├── passport-google-oauth20
+    │   ├── passport-kakao
+    │   ├── passport-naver
+    │   ├── passport-oauth
+    │   ├── passport-oauth1
+    │   ├── passport-oauth2
+    │   ├── passport-strategy
+    │   ├── path-is-absolute
+    │   ├── path-key
+    │   ├── path-parse
+    │   ├── path-scurry
+    │   ├── path-to-regexp
+    │   ├── pause
+    │   ├── pg-connection-string
+    │   ├── picocolors
+    │   ├── picomatch
+    │   ├── pkginfo
+    │   ├── proto-list
+    │   ├── proxy-addr
+    │   ├── proxy-from-env
+    │   ├── pstree.remy
+    │   ├── qs
+    │   ├── random-bytes
+    │   ├── range-parser
+    │   ├── raw-body
+    │   ├── readable-stream
+    │   ├── readdirp
+    │   ├── require-directory
+    │   ├── resolve
+    │   ├── retry-as-promised
+    │   ├── rimraf
+    │   ├── router
+    │   ├── safe-buffer
+    │   ├── safer-buffer
+    │   ├── semver
+    │   ├── send
+    │   ├── seq-queue
+    │   ├── sequelize
+    │   ├── sequelize-cli
+    │   ├── sequelize-pool
+    │   ├── serve-static
+    │   ├── set-blocking
+    │   ├── setprototypeof
+    │   ├── sharp
+    │   ├── shebang-command
+    │   ├── shebang-regex
+    │   ├── side-channel
+    │   ├── side-channel-list
+    │   ├── side-channel-map
+    │   ├── side-channel-weakmap
+    │   ├── signal-exit
+    │   ├── simple-swizzle
+    │   ├── simple-update-notifier
+    │   ├── sqlstring
+    │   ├── statuses
+    │   ├── streamsearch
+    │   ├── string-width
+    │   ├── string-width-cjs
+    │   ├── string_decoder
+    │   ├── strip-ansi
+    │   ├── strip-ansi-cjs
+    │   ├── supports-color
+    │   ├── supports-preserve-symlinks-flag
+    │   ├── swagger-autogen
+    │   ├── swagger-ui-dist
+    │   ├── swagger-ui-express
+    │   ├── tar
+    │   ├── to-regex-range
+    │   ├── toidentifier
+    │   ├── toposort-class
+    │   ├── touch
+    │   ├── tr46
+    │   ├── type-is
+    │   ├── typedarray
+    │   ├── uid-safe
+    │   ├── uid2
+    │   ├── umzug
+    │   ├── undefsafe
+    │   ├── underscore
+    │   ├── undici-types
+    │   ├── universalify
+    │   ├── unpipe
+    │   ├── util-deprecate
+    │   ├── utils-merge
+    │   ├── uuid
+    │   ├── validator
+    │   ├── vary
+    │   ├── webidl-conversions
+    │   ├── whatwg-url
+    │   ├── which
+    │   ├── wide-align
+    │   ├── wkx
+    │   ├── wrap-ansi
+    │   ├── wrap-ansi-cjs
+    │   ├── wrappy
+    │   ├── xtend
+    │   ├── y18n
+    │   ├── yallist
+    │   ├── yargs
+    │   └── yargs-parser
+    ├── openssl_san.cnf
+    ├── package-lock.json
+    ├── package.json
+    ├── routes
+    │   ├── AuthRoute.js
+    │   ├── CategoryRoute.js
+    │   ├── ImageUploadRoute.js
+    │   ├── LikeRoute.js
+    │   ├── PaymentRoute.js
+    │   ├── PostRoute.js
+    │   └── UserRoute.js
+    ├── swagger
+    │   └── swagger-output.json
+    ├── swagger.js
+    └── utils
+        ├── data
+        ├── imageProcess.js
+        ├── jwtUtils.js
+        ├── payments
+        └── seedCategories.js
+```
 
-License
+### Project Index
 
-Acknowledgments
+<details open>
+	<summary><b><code>/</code></b></summary>
+	<!-- __root__ Submodule -->
+	<details>
+		<summary><b>__root__</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ __root__</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/openssl_san.cnf'>openssl_san.cnf</a></b></td>
+					<td style='padding: 8px;'>- Openssl_san.cnf<code> configures the generation of an SSL/TLS certificate<br>- It specifies key parameters, distinguished name attributes (like organization and location), and importantly, Subject Alternative Names (SANs)<br>- The SANs define additional domain names associated with the certificate, enabling secure communication for multiple hostnames, such as </code>forum-backend-env.eba-rkkugpwy.ap-southeast-2.elasticbeanstalk.com` in this instance<br>- This ensures proper server authentication within the projects infrastructure.</td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/swagger.js'>swagger.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/forum-backend-env.env.yml'>forum-backend-env.env.yml</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/package-lock.json'>package-lock.json</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/package.json'>package.json</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/app.js'>app.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- migrations Submodule -->
+	<details>
+		<summary><b>migrations</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ migrations</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/migrations/20250522070405-create-post-images.js'>20250522070405-create-post-images.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/migrations/20250527103428-create-likes.js'>20250527103428-create-likes.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/migrations/20250428094449-create-post.js'>20250428094449-create-post.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/migrations/20250428090000-create-category.js'>20250428090000-create-category.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/migrations/20250428064947-create-user.js'>20250428064947-create-user.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- swagger Submodule -->
+	<details>
+		<summary><b>swagger</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ swagger</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/swagger/swagger-output.json'>swagger-output.json</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- config Submodule -->
+	<details>
+		<summary><b>config</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ config</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/config/config.json'>config.json</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/config/config.js'>config.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- auth Submodule -->
+	<details>
+		<summary><b>auth</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ auth</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/auth/passportConfig.js'>passportConfig.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/auth/AuthController.js'>AuthController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/auth/SocialAuthController.js'>SocialAuthController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- middlewares Submodule -->
+	<details>
+		<summary><b>middlewares</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ middlewares</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/middlewares/AuthMiddleware.js'>AuthMiddleware.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/middlewares/sessionMiddleware.js'>sessionMiddleware.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- utils Submodule -->
+	<details>
+		<summary><b>utils</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ utils</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/utils/imageProcess.js'>imageProcess.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/utils/seedCategories.js'>seedCategories.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/utils/jwtUtils.js'>jwtUtils.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+			<!-- payments Submodule -->
+			<details>
+				<summary><b>payments</b></summary>
+				<blockquote>
+					<div class='directory-path' style='padding: 8px 0; color: #666;'>
+						<code><b>⦿ utils.payments</b></code>
+					<table style='width: 100%; border-collapse: collapse;'>
+					<thead>
+						<tr style='background-color: #f8f9fa;'>
+							<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+							<th style='text-align: left; padding: 8px;'>Summary</th>
+						</tr>
+					</thead>
+						<tr style='border-bottom: 1px solid #eee;'>
+							<td style='padding: 8px;'><b><a href='/utils/payments/tosspayments.js'>tosspayments.js</a></b></td>
+							<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+						</tr>
+					</table>
+				</blockquote>
+			</details>
+		</blockquote>
+	</details>
+	<!-- models Submodule -->
+	<details>
+		<summary><b>models</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ models</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/models/LikeModel.js'>LikeModel.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/models/PostImagesModel.js'>PostImagesModel.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/models/UserModel.js'>UserModel.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/models/index.js'>index.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/models/CategoryModel.js'>CategoryModel.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/models/PostModel.js'>PostModel.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- controllers Submodule -->
+	<details>
+		<summary><b>controllers</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ controllers</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/controllers/PaymentController.js'>PaymentController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/controllers/ImageController.js'>ImageController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/controllers/CategoryController.js'>CategoryController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/controllers/PostController.js'>PostController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/controllers/UserController.js'>UserController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/controllers/LikeController.js'>LikeController.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+	<!-- routes Submodule -->
+	<details>
+		<summary><b>routes</b></summary>
+		<blockquote>
+			<div class='directory-path' style='padding: 8px 0; color: #666;'>
+				<code><b>⦿ routes</b></code>
+			<table style='width: 100%; border-collapse: collapse;'>
+			<thead>
+				<tr style='background-color: #f8f9fa;'>
+					<th style='width: 30%; text-align: left; padding: 8px;'>File Name</th>
+					<th style='text-align: left; padding: 8px;'>Summary</th>
+				</tr>
+			</thead>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/routes/PaymentRoute.js'>PaymentRoute.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/routes/PostRoute.js'>PostRoute.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/routes/CategoryRoute.js'>CategoryRoute.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/routes/UserRoute.js'>UserRoute.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/routes/AuthRoute.js'>AuthRoute.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/routes/ImageUploadRoute.js'>ImageUploadRoute.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='/routes/LikeRoute.js'>LikeRoute.js</a></b></td>
+					<td style='padding: 8px;'>Code>❯ REPLACE-ME</code></td>
+				</tr>
+			</table>
+		</blockquote>
+	</details>
+</details>
 
-Overview
-This repository contains the backend for the comprehensive JL Forum application. Built with Node.js and Express.js, it provides a robust API for user authentication, post management, image handling, and payment processing. The backend is designed for scalability and deployed on AWS Elastic Beanstalk, utilizing a MySQL database (potentially on AWS RDS) for data persistence.
+---
 
-Features
-User Authentication: Secure user registration, login, and session management using Passport.js, including social logins (Kakao, Naver, Google).
+## Getting Started
 
-Post Management: API endpoints for creating, viewing, editing, and deleting posts.
+### Prerequisites
 
-Image Uploads & Processing: Handles image uploads, including thumbnail generation and optimized storage using sharp.
+This project requires the following dependencies:
 
-Interactive Content: API support for liking posts.
+- **Programming Language:** JavaScript
+- **Package Manager:** Npm
 
-Categorization: Manages post categories for content organization.
+### Installation
 
-Payment Integration: Backend logic for payment functionalities (e.g., Toss Payments).
+Build from the source and intsall dependencies:
 
-API Documentation: Integrated Swagger for clear API endpoint documentation.
+1. **Clone the repository:**
 
-Database Management: Utilizes Sequelize ORM for robust MySQL database interactions, including migrations.
+   ```sh
+   ❯ git clone ../
+   ```
 
-Project Structure
-This repository focuses solely on the backend/ component of the JL Forum application.
+2. **Navigate to the project directory:**
 
-.
-├── app.js
-├── auth/
-│ ├── AuthController.js # Handles user authentication logic (login, register)
-│ ├── SocialAuthController.js # Handles social login (Kakao, Naver, Google)
-│ └── passportConfig.js # Passport.js strategy configuration
-├── config/
-│ ├── config.js # Application configuration settings
-│ └── config.json # Database configuration for Sequelize CLI
-├── controllers/
-│ ├── CategoryController.js # Logic for category-related operations
-│ ├── ImageController.js # Logic for image handling and uploads
-│ ├── LikeController.js # Logic for post liking/unliking
-│ ├── PaymentController.js # Logic for payment processing
-│ ├── PostController.js # Logic for post CRUD operations and image extraction
-│ └── UserController.js # Logic for user profile management
-├── forum-backend-env.env.yml # Elastic Beanstalk environment configuration
-├── middlewares/
-│ ├── AuthMiddleware.js # Middleware for authentication and authorization
-│ └── sessionMiddleware.js # Session management middleware
-├── migrations/ # Sequelize database migration files
-│ ├── 20250428064947-create-user.js
-│ ├── 20250428090000-create-category.js
-│ ├── 20250428094449-create-post.js
-│ ├── 20250522070405-create-post-images.js
-│ └── 20250527103428-create-likes.js
-├── models/
-│ ├── CategoryModel.js # Sequelize model for Categories
-│ ├── LikeModel.js # Sequelize model for Likes
-│ ├── PostImagesModel.js # Sequelize model for Post Images
-│ ├── PostModel.js # Sequelize model for Posts
-│ ├── UserModel.js # Sequelize model for Users
-│ └── index.js # Sequelize model initialization and associations
-├── openssl_san.cnf # OpenSSL configuration for SSL certificates
-├── package-lock.json
-├── package.json
-├── routes/
-│ ├── AuthRoute.js # API routes for authentication
-│ ├── CategoryRoute.js # API routes for categories
-│ ├── ImageUploadRoute.js # API routes for image uploads
-│ ├── LikeRoute.js # API routes for likes
-│ ├── PaymentRoute.js # API routes for payments
-│ ├── PostRoute.js # API routes for posts
-│ └── UserRoute.js # API routes for user profiles
-├── swagger/
-│ └── swagger-output.json # Generated Swagger API documentation
-│ # Note: This file is typically generated and should not be manually edited.
-├── swagger.js # Swagger auto-generation configuration
-└── utils/
-├── data/ # (Potentially) placeholder data or utility data
-├── imageProcess.js # Image resizing and saving utilities (using sharp)
-├── jwtUtils.js # JSON Web Token utilities
-├── payments/
-│ └── tosspayments.js # Toss Payments integration logic
-└── seedCategories.js # Script to seed initial categories into the database
+   ```sh
+   ❯ cd
+   ```
 
-Getting Started
-Follow these instructions to get the backend of the project up and running on your local machine for development and testing purposes.
+3. **Install the dependencies:**
 
-Prerequisites
-Ensure you have the following installed on your system:
+<!-- SHIELDS BADGE CURRENTLY DISABLED -->
 
-Node.js: Version 18.x or higher (LTS recommended)
+    <!-- [![npm][npm-shield]][npm-link] -->
+    <!-- REFERENCE LINKS -->
+    <!-- [npm-shield]: https://img.shields.io/badge/npm-CB3837.svg?style={badge_style}&logo=npm&logoColor=white -->
+    <!-- [npm-link]: https://www.npmjs.com/ -->
 
-npm (Node Package Manager): Comes with Node.js
+    **Using [npm](https://www.npmjs.com/):**
 
-MySQL: Database server (e.g., local MySQL instance or AWS RDS endpoint)
+    ```sh
+    ❯ npm install
+    ```
 
-Git: For cloning the repository
+### Usage
 
-Installation
-Clone the repository:
-If this backend is a standalone repository:
+Run the project with:
 
-git clone https://github.com/hellojuhyoung/project2_forum_backend.git
-cd project2_forum_backend
+**Using [npm](https://www.npmjs.com/):**
 
-If this backend is a subfolder within a larger monorepo (and this README is for that subfolder):
+```sh
+npm start
+```
 
-git clone https://github.com/hellojuhyoung/project2_forum_backend.git
-cd project2_forum_backend/backend # Adjust path if different
+### Testing
 
-(If this is a standalone backend repo, use the first git clone command. If it's part of a larger project, use the second and adjust the cd path if backend is nested differently.)
+uses the {**test_framework**} test framework. Run the test suite with:
 
-Install Backend Dependencies:
-Navigate to the backend directory (if not already there) and install dependencies:
+**Using [npm](https://www.npmjs.com/):**
 
-npm install
-
-Configuration
-Environment Variables
-Create a .env file in your backend/ directory. Refer to the .env.example file in your project root for required variables.
-
-backend/.env example:
-
-PORT=5001
-DB_HOST=localhost # Or your RDS endpoint
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=your_db_name
-JWT_SECRET=your_jwt_secret_key
-SESSION_SECRET=your_session_secret_key
-
-# Add API keys for social logins (Kakao, Naver, Google)
-
-KAKAO_CLIENT_ID=...
-KAKAO_CLIENT_SECRET=...
-NAVER_CLIENT_ID=...
-NAVER_CLIENT_SECRET=...
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-
-# Add Toss Payments secret key
-
-TOSS_PAYMENTS_SECRET_KEY=...
-
-Database Setup
-Create a MySQL database:
-
-CREATE DATABASE forum_db; # Replace 'forum_db' with your actual database name
-
-If using AWS RDS, ensure your RDS instance is set up and accessible.
-
-Run database migrations:
-Navigate to the backend directory and run Sequelize migrations to set up your database schema:
-
-npx sequelize db:migrate
-
-Seed initial categories (Optional):
-If you have a seedCategories.js script, you can run it to populate initial data:
-
-node utils/seedCategories.js
-
-Usage
-To run the backend server locally:
-
-Start the Backend Server:
-Navigate to the backend directory:
-
-npm start # Or 'npm run dev' if you have a dev script with nodemon
-
-The backend API will typically run on http://localhost:5001.
-
-Testing
-The project uses the npm test command for backend testing.
-
-Run Backend Tests:
-Navigate to the backend directory:
-
-cd backend
+```sh
 npm test
+```
 
-(Ensure you have configured your backend tests in package.json.)
+---
 
-Deployment
-This backend application is designed for deployment on AWS Elastic Beanstalk, providing a managed environment for Node.js applications.
+## Roadmap
 
-Deployment typically involves:
+- [x] **`Task 1`**: <strike>Implement feature one.</strike>
+- [ ] **`Task 2`**: Implement feature two.
+- [ ] **`Task 3`**: Implement feature three.
 
-Packaging your backend code.
+---
 
-Creating and configuring an Elastic Beanstalk environment (Node.js platform).
+## Contributing
 
-Connecting your Elastic Beanstalk environment to an AWS RDS MySQL instance.
+- **💬 [Join the Discussions](https://LOCAL///discussions)**: Share your insights, provide feedback, or ask questions.
+- **🐛 [Report Issues](https://LOCAL///issues)**: Submit bugs found or log feature requests for the `` project.
+- **💡 [Submit Pull Requests](https://LOCAL///blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
 
-Setting up environment variables directly within the Elastic Beanstalk environment.
+<details closed>
+<summary>Contributing Guidelines</summary>
 
-Deploying your application package.
+1. **Fork the Repository**: Start by forking the project repository to your LOCAL account.
+2. **Clone Locally**: Clone the forked repository to your local machine using a git client.
+   ```sh
+   git clone .
+   ```
+3. **Create a New Branch**: Always work on a new branch, giving it a descriptive name.
+   ```sh
+   git checkout -b new-feature-x
+   ```
+4. **Make Your Changes**: Develop and test your changes locally.
+5. **Commit Your Changes**: Commit with a clear message describing your updates.
+   ```sh
+   git commit -m 'Implemented new feature x.'
+   ```
+6. **Push to LOCAL**: Push the changes to your forked repository.
+   ```sh
+   git push origin new-feature-x
+   ```
+7. **Submit a Pull Request**: Create a PR against the original project repository. Clearly describe the changes and their motivations.
+8. **Review**: Once your PR is reviewed and approved, it will be merged into the main branch. Congratulations on your contribution!
+</details>
 
-Roadmap
-Task 1: Implement feature one.
+<details closed>
+<summary>Contributor Graph</summary>
+<br>
+<p align="left">
+   <a href="https://LOCAL{///}graphs/contributors">
+      <img src="https://contrib.rocks/image?repo=/">
+   </a>
+</p>
+</details>
 
-Task 2: Implement feature two.
+---
 
-Task 3: Implement feature three.
+## License
 
-Future Enhancements (Backend-focused):
+is protected under the [LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
 
-Implement real-time notifications for new posts/comments.
+---
 
-Optimize API performance and database queries.
+## Acknowledgments
 
-Add robust logging and monitoring.
-
-Expand moderation tools for content.
-
-Integrate with more third-party services as needed.
-
-License
-JL Forum Backend is protected under the MIT License. For more details, refer to the LICENSE file in the repository.
-
-Acknowledgments
-Credit to eli64s/readme-ai for the README generation tool.
-
-Thanks to all contributors, libraries, and resources that made this project possible.
+- Credit `contributors`, `inspiration`, `references`, etc.
 
 <div align="right">
 
+[![][back-to-top]](#top)
+
 </div>
+
+[back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
+
+---
