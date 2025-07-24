@@ -12,6 +12,8 @@ let sequelize;
 
 let config; // Declare config variable outside
 
+const sequelizeLoggingOption = env === "production" ? false : console.log;
+
 if (env === "production") {
   // In production, prioritize environment variables
   config = {
@@ -33,19 +35,17 @@ if (env === "production") {
   config = require(__dirname + "/../config/config.json")[env];
 }
 
-// const sequelizeLoggingOption = env === "production" ? false : console.log;
-
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     ...config,
-    // logging: sequelizeLoggingOption,
+    logging: sequelizeLoggingOption,
   });
 } else {
   // Create a new options object by spreading the existing config
   // and then adding or overriding the logging property
   const sequelizeOptions = {
     ...config, // This spreads all properties from your config.json (host, dialect, etc.)
-    // logging: sequelizeLoggingOption,
+    logging: sequelizeLoggingOption,
   };
 
   sequelize = new Sequelize(

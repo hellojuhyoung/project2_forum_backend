@@ -11,9 +11,19 @@ const fs = require("fs");
 
 // Helper function to extract the first image URL from Markdown content
 function extractImageUrlFromMarkdown(markdownContent) {
-  const imageRegex =
-    /!\[.*?\]\((https?:\/\/[^\s)]+\.(?:jpg|jpeg|png|gif|webp|svg))\)/;
+  // FIX: Even more permissive regex for the URL part within Markdown link.
+  // It matches any characters (except closing parenthesis) after http(s):// until the link's closing parenthesis.
+  // This should handle complex paths, query parameters, and unusual characters like '!' within the URL.
+  const imageRegex = /!\[.*?\]\((https?:\/\/[^)]+)\)/i; // Key change: `[^)]+` for the URL part
   const match = markdownContent.match(imageRegex);
+  console.log(
+    "[DEBUG - extractImageUrlFromMarkdown] Markdown Content:",
+    markdownContent
+  ); // Added for debugging
+  console.log(
+    "[DEBUG - extractImageUrlFromMarkdown] Regex Match:",
+    match ? match[1] : "No match"
+  ); // Added for debugging
   return match ? match[1] : null;
 }
 
@@ -21,41 +31,71 @@ function extractImageUrlFromMarkdown(markdownContent) {
 async function createPost(req, res) {
   try {
     const { title, content, userid, categoryid, images } = req.body;
-    let thumbnailPath = null;
+    let thumbnailPath = null; // Initialize thumbnailPath
     let postImagesData = [];
+
+    // --- Start Debugging Block ---
+    console.log("[DEBUG - createPost] Incoming content:", content);
+    console.log(
+      "[DEBUG - createPost] Incoming images array (length):",
+      images ? images.length : 0
+    );
+    // --- End Debugging Block ---
 
     const imageUrlFromContent = extractImageUrlFromMarkdown(content);
 
-    // ✨ MODIFIED LOGIC: Handle external URL image for thumbnail
+    // Logic to determine thumbnailPath: prioritize URL from content, then local Base64, then fallback
     if (imageUrlFromContent) {
+      console.log(
+        "[DEBUG - createPost] Path 1: imageUrlFromContent FOUND:",
+        imageUrlFromContent
+      );
       try {
-        // Fetch the external image, process it, and save a local thumbnail
+        // Attempt to save thumbnail from the extracted URL
         const thumbnailResult = await saveImageUrl(imageUrlFromContent, true);
         thumbnailPath = thumbnailResult.publicPath;
+        console.log(
+          "[DEBUG - createPost] Path 1.1: saveImageUrl SUCCEEDED, thumbnailPath:",
+          thumbnailPath
+        );
       } catch (urlProcessError) {
         console.warn(
-          `Could not process URL image for thumbnail: ${imageUrlFromContent}. Using fallback.`,
-          urlProcessError
+          `[DEBUG - createPost] Path 1.2: saveImageUrl FAILED for URL: ${imageUrlFromContent}. Error:`,
+          urlProcessError.message || urlProcessError
         );
-        thumbnailPath = "/no-image.jpg"; // Fallback if URL processing fails
+        // If URL processing fails, try local images if available
+        if (images && images.length > 0) {
+          console.log(
+            "[DEBUG - createPost] Path 1.2.1: Falling back to local image for thumbnail."
+          );
+          const thumbnailResult = await saveBase64Image(images[0], true);
+          thumbnailPath = thumbnailResult.publicPath;
+        } else {
+          console.log(
+            "[DEBUG - createPost] Path 1.2.2: No local images, setting thumbnailPath to /no-image.jpg."
+          );
+          thumbnailPath = "/no-image.jpg";
+        }
       }
     }
-    // This `else if` block handles images sent as Base64 (typically from local file uploads)
+    // If no URL image in content, check for local Base64 images
     else if (images && images.length > 0) {
-      // Save thumbnail from the first image in the `images` array
+      console.log(
+        "[DEBUG - createPost] Path 2: imageUrlFromContent NOT found, using local images."
+      );
       const thumbnailResult = await saveBase64Image(images[0], true);
       thumbnailPath = thumbnailResult.publicPath;
-
-      // Save all content images if applicable
-      const savedImages = await Promise.all(
-        images.map((img) => saveBase64Image(img, false))
+      console.log(
+        "[DEBUG - createPost] Path 2.1: saveBase64Image SUCCESS, path:",
+        thumbnailPath
       );
-      postImagesData = savedImages.map((img) => ({
-        postImage: img.publicPath,
-      }));
-    } else {
-      // If no image (URL or local file) is found in content or `images` array
-      thumbnailPath = null; // Or set a default placeholder like "/no-image.jpg"
+    }
+    // If neither URL image nor local Base64 images are found, use default placeholder
+    else {
+      console.log(
+        "[DEBUG - createPost] Path 3: No image found (URL or local), setting thumbnailPath to /no-image.jpg."
+      );
+      thumbnailPath = "/no-image.jpg"; // Ensure it's never null when saved
     }
 
     console.log(
@@ -70,8 +110,16 @@ async function createPost(req, res) {
       categoryid: categoryid,
     });
 
-    if (postImagesData.length > 0) {
-      postImagesData.forEach((img) => (img.postid = post.id));
+    // Handle saving all original content images (if they are local Base64 uploads)
+    // This part should be independent of thumbnail logic for content images.
+    if (images && images.length > 0) {
+      const savedImages = await Promise.all(
+        images.map((img) => saveBase64Image(img, false)) // save original size
+      );
+      postImagesData = savedImages.map((img) => ({
+        postImage: img.publicPath,
+      }));
+      postImagesData.forEach((img) => (img.postid = post.id)); // Ensure postid is set
       await models.PostImages.bulkCreate(postImagesData);
     }
 
@@ -114,30 +162,51 @@ async function updatePost(req, res) {
     }
 
     let newThumbnailPath = null;
-    let postImagesData = [];
 
     const imageUrlFromNewContent = extractImageUrlFromMarkdown(content);
 
-    // ✨ MODIFIED LOGIC: Handle external URL image for thumbnail during update
+    // Logic to determine newThumbnailPath for update: prioritize URL from content, then local Base64, then retain existing or fallback
     if (imageUrlFromNewContent) {
+      console.log(
+        "[DEBUG - updatePost] Path 1: imageUrlFromNewContent FOUND:",
+        imageUrlFromNewContent
+      );
       try {
         const thumbnailResult = await saveImageUrl(
           imageUrlFromNewContent,
           true
         );
         newThumbnailPath = thumbnailResult.publicPath;
+        console.log(
+          "[DEBUG - updatePost] Path 1.1: saveImageUrl SUCCEEDED, newThumbnailPath:",
+          newThumbnailPath
+        );
       } catch (urlProcessError) {
         console.warn(
-          `Could not process URL image for thumbnail during update: ${imageUrlFromNewContent}. Using fallback.`,
-          urlProcessError
+          `[DEBUG - updatePost] Path 1.2: saveImageUrl FAILED for URL: ${imageUrlFromNewContent}. Error:`,
+          urlProcessError.message || urlProcessError
         );
-        newThumbnailPath = "/no-image.jpg"; // Fallback if URL processing fails
+        if (images && images.length > 0) {
+          console.log(
+            "[DEBUG - updatePost] Path 1.2.1: Falling back to local image for thumbnail."
+          );
+          const thumbnailResult = await saveBase64Image(images[0], true);
+          newThumbnailPath = thumbnailResult.publicPath;
+        } else {
+          console.log(
+            "[DEBUG - updatePost] Path 1.2.2: No local images, setting newThumbnailPath to /no-image.jpg."
+          );
+          newThumbnailPath = "/no-image.jpg";
+        }
       }
     }
-    // This `else if` block handles images sent as Base64 (local file uploads)
+    // If no URL image in new content, check for local Base64 images
     else if (images) {
-      // Check if `images` array was provided (even if empty)
-      // Clear existing images from disk and DB first if new images are provided
+      // `images` can be an empty array if client explicitly cleared images
+      console.log(
+        "[DEBUG - updatePost] Path 2: imageUrlFromNewContent NOT found, using local images."
+      );
+      // Clear existing images from disk and DB first if new images are provided or cleared
       const existingImages = await models.PostImages.findAll({
         where: { postid: id },
       });
@@ -151,28 +220,39 @@ async function updatePost(req, res) {
       await models.PostImages.destroy({ where: { postid: id } });
 
       if (images.length > 0) {
-        // Save new thumbnail from first image in the provided `images` array
         const thumbnailResult = await saveBase64Image(images[0], true);
         newThumbnailPath = thumbnailResult.publicPath;
+        console.log(
+          "[DEBUG - updatePost] Path 2.1: saveBase64Image SUCCESS, newThumbnailPath:",
+          newThumbnailPath
+        );
 
-        // Save new content images
         const savedImages = await Promise.all(
           images.map((img) => saveBase64Image(img, false))
         );
-
-        postImagesData = savedImages.map((img) => ({
+        const postImagesData = savedImages.map((img) => ({
           postImage: img.publicPath,
           postid: id,
         }));
-
         await models.PostImages.bulkCreate(postImagesData);
       } else {
-        newThumbnailPath = null; // If `images` array provided but empty, clear thumbnail
+        console.log(
+          "[DEBUG - updatePost] Path 2.2: Images array empty, setting newThumbnailPath to /no-image.jpg."
+        );
+        newThumbnailPath = "/no-image.jpg"; // If `images` array provided but empty, use default
       }
-    } else {
-      // If no new `images` array, and no new content URL, retain existing thumbnail
-      newThumbnailPath = post.thumbnail;
     }
+    // If no new `images` array AND no new content URL, retain existing thumbnail or use default
+    else {
+      console.log(
+        "[DEBUG - updatePost] Path 3: No new image found (URL or local), retaining existing thumbnail or using default."
+      );
+      newThumbnailPath = post.thumbnail || "/no-image.jpg"; // Retain existing or use default if existing is null
+    }
+
+    console.log(
+      `[DEBUG - PostController] Final newThumbnailPath for database: ${newThumbnailPath}`
+    );
 
     await post.update(
       {
@@ -216,6 +296,13 @@ async function getPost(req, res) {
         },
       ],
     });
+
+    // FIX: Check if post was found before calling toJSON()
+    if (!response) {
+      console.log(`[DEBUG - getPost] Post with ID ${id} not found.`);
+      return res.status(404).json({ result: false, message: "Post not found" });
+    }
+
     const post = response.toJSON();
 
     res.json({ post, result: true, message: "succeeded in getting post" });
@@ -234,6 +321,14 @@ const getRecentPosts = async (req, res) => {
     const posts = await models.Posts.findAll({
       limit,
       order: [["createdAt", "DESC"]],
+      // ✨ FIX: Explicitly include 'thumbnail' attribute
+      attributes: [
+        "id",
+        "title",
+        "thumbnail", // <--- ADDED THIS
+        "createdAt",
+        // Add other top-level Post attributes needed for the card
+      ],
       include: [
         {
           model: models.Users,
@@ -250,6 +345,9 @@ const getRecentPosts = async (req, res) => {
     });
   } catch (error) {
     console.error("error fetching most recent posts", error);
+    res
+      .status(500)
+      .json({ result: false, message: "server error", error: error.message });
   }
 };
 
@@ -268,12 +366,13 @@ const getMostLikedPosts = async (req, res) => {
     ];
 
     const posts = await models.Posts.findAll({
-      attributes: attributesToSelect,
+      attributes: attributesToSelect, // This should already include 'thumbnail' if it's a raw attribute
       include: [
         {
           model: models.Users,
           as: "user",
-          attributes: ["username"],
+          attributes: ["username"], // FIX: Ensure username is explicitly included for MostLikedPosts
+          duplicating: false, // Ensure this is false for correct user association
         },
         {
           model: models.Likes,
@@ -315,20 +414,26 @@ const getPaginatedPosts = async (req, res) => {
       offset,
       limit,
       order: [["createdAt", "DESC"]],
+      // ✨ FIX: Explicitly include 'thumbnail' attribute
+      attributes: [
+        "id",
+        "title",
+        "thumbnail", // <--- ADDED THIS
+        "createdAt",
+        // Add other top-level Post attributes needed for the card
+      ],
       include: [
         {
           model: models.Users,
           as: "user",
-          attributes: ["username"],
+          attributes: ["username"], // FIX: Ensure username is explicitly included
         },
       ],
     });
 
-    const posts = rows.map((post) => ({
-      ...post.dataValues,
-      username: post.user?.username,
-      category: post.category?.label,
-    }));
+    // FIX: Map to post.toJSON() to preserve nested user object structure
+    const posts = rows.map((post) => post.toJSON());
+
     const totalPages = Math.ceil(count / limit);
 
     res.json({

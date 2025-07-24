@@ -39,7 +39,13 @@ async function saveImageUrl(imageUrl, isThumbnail = false) {
       throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
     }
 
-    const imageBuffer = await response.buffer(); // Get image data as a Buffer
+    const arrayBuffer = await response.arrayBuffer(); // Get as ArrayBuffer
+    const imageBuffer = Buffer.from(arrayBuffer); // Convert ArrayBuffer to Node.js Buffer
+
+    console.log(
+      `[DEBUG - saveImageUrl] Fetched image buffer size: ${imageBuffer.length} bytes`
+    );
+
     const contentType = response.headers.get("content-type");
     let ext = "jpg"; // Default extension
 
