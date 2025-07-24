@@ -202,7 +202,7 @@ TOSS_PAYMENTS_SECRET_KEY=...
 Database Setup
 Create a MySQL database:
 
-CREATE DATABASE forum_db
+CREATE DATABASE forum_db; # Replace 'forum_db' with your actual database name
 
 If using AWS RDS, ensure your RDS instance is set up and accessible.
 
