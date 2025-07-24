@@ -3,7 +3,7 @@
 <!-- HEADER STYLE: CLASSIC -->
 <div align="center">
 
-<img src="readmeai/assets/logos/purple.svg" width="30%" style="position: relative; top: 0; right: 0;" alt="Project Logo"/>
+<img src="http://googleusercontent.com/file_content/35" width="15%" alt="JL Logo"/>
 
 # <code>❯ JL Forum Backend API</code>
 
